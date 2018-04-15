@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import './App.css';
-import { Header } from './components';
+import React, {Component} from 'react';
+import './App.scss';
+import { Header, Sidebar } from './components';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-          <Header/>
+        <Header/>
+        <Sidebar/>
       </div>
     );
   }
