@@ -1,7 +1,7 @@
+import Sidenav from './Sidenav/Sidenav';
 import Header from './Header/Header';
-import Sidebar from './Sidebar/Sidebar';
 
 export {
-  Header,
-  Sidebar
-};
+  Sidenav,
+  Header
+}

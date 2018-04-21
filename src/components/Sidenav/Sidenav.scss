@@ -1,0 +1,17 @@
+.Sidenav {
+  position: relative;
+  z-index: 0;
+
+  .bm-menu-wrap {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+  .bm-item-list {
+    padding-top: 25%;
+    background-color: white;
+  }
+  .test-input {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
