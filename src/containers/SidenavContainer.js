@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import * as actions from '../actions/index';
+import * as sidenavActions from '../store/modules/sidenav';
 import { Sidenav } from '../components/index';
 
 const mapStateToProps = (state) => ({
-  isSidenavOpen: state.sidenavData.isSidenavOpen
+  isSidenavOpen: state.sidenav.isSidenavOpen
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onToggleSidenav: () => dispatch(actions.toggleSidenav())
+  onToggleSidenav: () => dispatch(sidenavActions.toggleSidenav())
 });
 
 const SidenavContainer = connect(

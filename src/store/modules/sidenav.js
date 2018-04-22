@@ -1,4 +1,8 @@
-import * as types from '../actions/ActionTypes';
+const TOGGLE_SIDENAV = 'TOGGLE_SIDENAV';
+
+export const toggleSidenav = () => ({
+  type: TOGGLE_SIDENAV
+});
 
 const initialState = {
   isSidenavOpen: false,
@@ -6,8 +10,7 @@ const initialState = {
 
 const sidenav = (state = initialState, action) => {
   switch (action.type) {
-    case types.TOGGLE_SIDENAV:
-      console.log("toggle sidenav");
+    case TOGGLE_SIDENAV:
       return {
         ...state,
         isSidenavOpen: !(state.isSidenavOpen)

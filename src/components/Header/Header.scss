@@ -1,11 +1,18 @@
 .Header {
-    z-index: 1;
-    font-family: 'Josefin Slab';
-    font-weight: bold;
-    > nav {
-        position: relative;
-    }
+  z-index: 1;
+  font-family: 'Josefin Slab';
+  font-weight: bold;
+  > nav {
+    position: relative;
+
     .nav-wrapper {
-        background-color: #f6c343;
+      background-color: #f6c343;
+      text-align: center;
     }
+  }
+
+  .menu-icon {
+    position: absolute;
+    left: 0;
+  }
 }

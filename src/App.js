@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './App.scss';
-import {SidenavContainer, HeaderContainer} from './containers/index';
+import {SidenavContainer, HeaderContainer, BoardContainer} from './containers/index';
 
 class App extends Component {
   render() {
@@ -8,6 +8,7 @@ class App extends Component {
       <div className="App">
         <SidenavContainer/>
         <HeaderContainer/>
+        <BoardContainer/>
       </div>
     );
   }
