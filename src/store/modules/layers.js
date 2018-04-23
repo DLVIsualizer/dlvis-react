@@ -19,8 +19,8 @@ export const setModel = (modelID) => ({
 const initialState = Map({
   model_id: 0,
   model_graph: Map({
-    data: List([]),
-    links: List([])
+    graph: Map({}),
+    tooltip: Map({})
   }),
   model_graphs: Map({})
 });

@@ -6,13 +6,9 @@ const mapStateToProps = (state) => ({
   isSidenavOpen: state.sidenav.isSidenavOpen
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onToggleSidenav: () => dispatch(sidenavActions.toggleSidenav())
-});
-
 const SidenavContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(Sidenav);
 
 export default SidenavContainer;
