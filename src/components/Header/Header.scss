@@ -1,18 +1,62 @@
 .Header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 0px 5px 0px 5px;
+  height: 64px;
+  background-color: #f6c343;
+  color: white;
   z-index: 1;
   font-family: 'Josefin Slab';
   font-weight: bold;
-  > nav {
-    position: relative;
 
-    .nav-wrapper {
-      background-color: #f6c343;
-      text-align: center;
-    }
+  > div {
+    display: inline-block;
+    line-height: 70px;
   }
 
   .menu-icon {
-    position: absolute;
-    left: 0;
+    width: 5%;
+    font-size: 1.2em;
+    text-align: center;
   }
+
+  .logo {
+    font-size: 1.4em;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+
+  .hvr-grow {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    transition-duration: 0.3s;
+    transition-property: transform;
+    cursor: pointer;
+  }
+
+  .hvr-grow:hover,
+  .hvr-grow:focus,
+  .hvr-grow:active {
+    transform: scale(1.2);
+  }
+
+  //> nav {
+  //  position: relative;
+  //
+  //  .nav-wrapper {
+  //
+  //    text-align: center;
+  //  }
+  //}
+  //
+  //.menu-icon {
+  //  position: absolute;
+  //  left: 0;
+  //}
 }

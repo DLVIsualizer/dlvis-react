@@ -1,40 +1,40 @@
 import { Map, List } from 'immutable';
 
-const ADD_LAYERS_INFO = 'ADD_LAYERS_INFO';
-const CHANGE_MODEL_ID = "CHANGE_MODEL_ID";
+const ADD_MODEL_GRAPH = 'ADD_MODEL_GRAPH';
+const SET_MODEL = 'SET_MODEL';
 
-export const addLayersInfo = (modelID, modelLayers) => ({
-  type: ADD_LAYERS_INFO,
+export const addModelGraph = (modelID, modelGraph) => ({
+  type: ADD_MODEL_GRAPH,
   payload: {
     id: modelID,
-    layers: modelLayers
+    graph: modelGraph
   }
 });
 
-export const changeModelID = (modelID) => ({
-  type: CHANGE_MODEL_ID,
+export const setModel = (modelID) => ({
+  type: SET_MODEL,
   id: modelID
 });
 
 const initialState = Map({
   model_id: 0,
-  layers_info: List([])
+  model_graph: Map({
+    data: List([]),
+    links: List([])
+  }),
+  model_graphs: Map({})
 });
 
 const layers = (state=initialState, action) => {
-  const layers_info = state.get('layers_info');
-
+  const model_graphs = state.get('model_graphs');
+  console.log("model_graphs!!", model_graphs.toJS());
   switch(action.type) {
-    case ADD_LAYERS_INFO:
-      console.log("action", action);
-      return state.set('layers_info', layers_info.push(
-        Map({
-          id: action.payload.id,
-          layers: action.payload.layers
-        })
-      ));
-    case CHANGE_MODEL_ID:
-      return state.set('model_id', action.id);
+    case ADD_MODEL_GRAPH:
+      return state.setIn(['model_graphs', action.payload.id], Map(action.payload.graph));
+    case SET_MODEL:
+      return state
+        .set('model_id', action.id)
+        .set('model_graph', model_graphs.get(action.id));
     default:
       return state;
   }

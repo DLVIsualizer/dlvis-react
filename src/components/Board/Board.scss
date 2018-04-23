@@ -1,3 +1,22 @@
 .Board {
+  padding: 30px;
 
+  > div {
+    height: 600vh !important;
+    overflow: hidden;
+
+    > object {
+      display: none !important;
+    }
+  }
+  //height: 100vh;
+  //position: relative;
+  //
+  //> div {
+  //  position: absolute;
+  //  top: 0;
+  //  left: 0;
+  //  bottom: 0;
+  //  right: 0;
+  //}
 }
