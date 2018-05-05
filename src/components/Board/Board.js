@@ -34,6 +34,8 @@ const Board = ({model_id, model_graph}) => {
         symbolSize: [120,20],
         symbol: 'rect',
         roam: true,
+        // PBW 0505_2018
+        top: 80,
         label: {
           normal: {
             show: true,
