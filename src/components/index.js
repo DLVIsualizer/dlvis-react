@@ -7,5 +7,5 @@ export {
   Sidenav,
   Header,
   Board,
-  ModelDropdown,
+  ModelDropdown
 }

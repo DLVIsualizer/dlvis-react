@@ -72,7 +72,7 @@ const Board = ({model_id, model_graph}) => {
 };
 
 Board.propTypes = {
-  model_id: PropTypes.number,
+  model_id: PropTypes.string,
   model_graph: PropTypes.instanceOf(Map)
 };
 

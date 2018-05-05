@@ -1,43 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import './ModelDropdown.scss';
+import {ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import './ModelDropdown.scss'
 
-class ModelDropdown extends React.Component {
-  constructor(props) {
-    super(props);
+const ModelDropdown = ({dropdownOpen, toggle, dropdownValue, onChangeModeldropdown, onSetModel}) => {
+  let resf = function (){onChangeModeldropdown('ResNet50'),onSetModel('ResNet50') }
+  let incf = function () {onChangeModeldropdown('InceptionV3'),onSetModel('InceptionV3') }
+  let basf = function () {onChangeModeldropdown('Basic Convnet'),onSetModel('Basic Convnet')}
+  return <div className="ModelDropdown">
+    <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
+      <DropdownToggle caret>
+        {dropdownValue}
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem>
+          <div onClick={resf}>ResNet50</div>
+        </DropdownItem>
+        <DropdownItem>
+          <div onClick={incf}>InceptionV3</div>
+        </DropdownItem>
+        <DropdownItem>
+          <div onClick={basf}>Basic Convnet</div>
+        </DropdownItem>
+      </DropdownMenu>
+    </ButtonDropdown>
+  </div>
+};
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      dropdownOpen: false
-    };
-  }
+ModelDropdown.propTypes = {
+  dropdownOpen: PropTypes.bool,
+  toggle: PropTypes.func,
+  dropdownValue: PropTypes.string,
+  onChangeModeldropdown: PropTypes.func
+};
 
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-
-  render() {
-    const {onSetModel} = this.props;
-
-    return (
-      <div className="ModelDropdown">
-        <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-          <DropdownToggle caret>
-            Select Model
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem>ResNet50</DropdownItem>
-            <DropdownItem>Basic Convnet</DropdownItem>
-            <DropdownItem>InceptionV3</DropdownItem>
-          </DropdownMenu>
-        </ButtonDropdown>
-      </div>
-    );
-  }
-}
-
+ModelDropdown.defaultProps = {
+  onChangeModeldropdown: () => console.warn('onChangeModeldropdown not defined')
+};
 
 export default ModelDropdown;
