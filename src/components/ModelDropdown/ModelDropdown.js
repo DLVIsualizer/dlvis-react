@@ -20,24 +20,23 @@ class ModelDropdown extends React.Component {
   }
 
   render() {
-    const {onSetModel} = this.props;
+    const {onSetModel, model_id} = this.props;
 
     return (
       <div className="ModelDropdown">
         <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
           <DropdownToggle caret>
-            Select Model
+            {model_id}
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem>ResNet50</DropdownItem>
-            <DropdownItem>Basic Convnet</DropdownItem>
-            <DropdownItem>InceptionV3</DropdownItem>
+            <DropdownItem onClick={()=>onSetModel(0)}>ResNet50</DropdownItem>
+            <DropdownItem onClick={()=>onSetModel(1)}>Basic Convnet</DropdownItem>
+            <DropdownItem onClick={()=>onSetModel(2)}>InceptionV3</DropdownItem>
           </DropdownMenu>
         </ButtonDropdown>
       </div>
     );
   }
 }
-
 
 export default ModelDropdown;

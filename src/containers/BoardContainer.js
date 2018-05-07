@@ -23,15 +23,14 @@ class BoardContainer extends React.Component {
 
   render() {
     const {model_id, model_graph, onSetModel} = this.props;
-    const boardComponent =
 
-    console.log("model_id, model_graph", model_id, model_graph.toJS());
+    // console.log("model_id, model_graph", model_id, model_graph.toJS());
     return (
       <div>
         {
           (model_graph)? <Board model_id={model_id} model_graph={model_graph.toJS()}/> : null
         }
-        <ModelDropdown onSetModel={onSetModel}/>
+        <ModelDropdown model_id={model_id} onSetModel={onSetModel}/>
       </div>
     )
   }
