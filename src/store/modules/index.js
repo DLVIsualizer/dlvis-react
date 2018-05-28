@@ -1,10 +1,8 @@
 import {combineReducers} from 'redux';
 import sidenav from './sidenav';
-import layers from './layers';
-import modeldropdown from './modeldropdown';
+import models from './models';
 
 export default combineReducers({
     sidenav,
-    layers,
-    modeldropdown
+    models,
 })

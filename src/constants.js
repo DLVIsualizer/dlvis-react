@@ -1,0 +1,1 @@
+export const MODEL_NAMES = ["ResNet50", "InceptionV3", "Basic Convnet"];
