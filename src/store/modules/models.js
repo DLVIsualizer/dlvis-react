@@ -25,9 +25,9 @@ const initialState = Map({
   model_graphs: Map({})
 });
 
-const layers = (state=initialState, action) => {
+const models = (state=initialState, action) => {
   const model_graphs = state.get('model_graphs');
-  console.log("model_graphs!!", model_graphs.toJS());
+
   switch(action.type) {
     case ADD_MODEL_GRAPH:
       return state.setIn(['model_graphs', action.payload.id], Map(action.payload.graph));
@@ -40,6 +40,6 @@ const layers = (state=initialState, action) => {
   }
 };
 
-export default layers;
+export default models;
 
 

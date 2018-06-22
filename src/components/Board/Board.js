@@ -9,6 +9,7 @@ const Board = ({model_id, model_graph}) => {
   const links = model_graph['graph']['links'];
   const tooltip = model_graph['tooltip'];
 
+  // console.log("board model_id", model_id);
   const colors = {
     'InputLayer': '#C9856B',
     'ZeroPadding2D': '#334552',
@@ -34,6 +35,8 @@ const Board = ({model_id, model_graph}) => {
         symbolSize: [120,20],
         symbol: 'rect',
         roam: true,
+        // PBW 0505_2018
+        top: 80,
         label: {
           normal: {
             show: true,
@@ -73,11 +76,12 @@ const Board = ({model_id, model_graph}) => {
 
 Board.propTypes = {
   model_id: PropTypes.number,
-  model_graph: PropTypes.instanceOf(Map)
+  model_graph: PropTypes.object
 };
 
 Board.defaultProps = {
-
+  model_id: 0,
+  model_graph: {}
 };
 
 export default Board;

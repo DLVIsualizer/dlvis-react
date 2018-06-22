@@ -1,12 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Map, List} from 'immutable';
 import {Board, ModelDropdown} from '../components/index';
-import {addModelGraph, setModel} from '../store/modules/layers';
-import {Map} from "immutable";
 import {API_URL} from "../config";
 import axios from "axios/index";
-import * as layersActions from "../store/modules/layers";
-import * as sidenavActions from "../store/modules/sidenav";
+import * as layersActions from "../store/modules/models";
 
 class BoardContainer extends React.Component {
   componentDidMount() {
@@ -16,29 +14,37 @@ class BoardContainer extends React.Component {
       .then(response => {
         onAddModelGraph(model_id, response.data);
         onSetModel(model_id);
-        console.log("response", response.data);
       })
   }
 
+  componentWillReceiveProps(nextProps) {
+    // const {model_id, model_graphs, onAddModelGraph} = this.props;
+    //
+    // // model id modified
+    // if(!model_graphs.get(model_id)) {
+    //   axios.get(API_URL + `/layers/${nextProps.model_id}`)
+    //     .then(response => {
+    //       onAddModelGraph(model_id, response.data);
+    //     })
+    // }
+  }
 
   render() {
-    const {model_id, model_graph, onSetModel} = this.props;
+    const {model_id, model_graph} = this.props;
 
-    // console.log("model_id, model_graph", model_id, model_graph.toJS());
     return (
       <div>
         {
-          (model_graph)? <Board model_id={model_id} model_graph={model_graph.toJS()}/> : null
+          (model_graph) ? <Board model_id={model_id} model_graph={model_graph.toJS()}/> : null
         }
-        <ModelDropdown model_id={model_id} onSetModel={onSetModel}/>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  model_id: state.layers.get('model_id'),
-  model_graph: state.layers.get('model_graph')
+  model_id: state.models.get('model_id'),
+  model_graph: state.models.get('model_graph')
 });
 
 
@@ -51,3 +57,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(BoardContainer);
+

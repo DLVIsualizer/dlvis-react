@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import sidenav from './sidenav';
-import layers from './layers';
+import models from './models';
 
 export default combineReducers({
-  sidenav,
-  layers
+    sidenav,
+    models,
 })
