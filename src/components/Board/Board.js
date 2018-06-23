@@ -24,19 +24,27 @@ const Board = ({model_id, model_graph}) => {
       formatter: (params) => {
         const style = '<div style="color:' + colors[params.value] + '"><b>';
         return style + params.value + "</b></div>" + tooltip[params.name];
-      }
+      },
+      showDelay:0,
+      hideDelay:0,
+      transitionDelay:0
     },
+    animation: false,
     animationDurationUpdate: 1500,
+    animationDelay: 0,
     animationEasingUpdate: 'quinticInOut',
     series : [
       {
         type: 'graph',
         layout: 'none',
-        symbolSize: [120,20],
+        // symbolSize: [120,20],
+        symbolSize: [165,20],
         symbol: 'rect',
-        roam: true,
+        // roam: true,
+        roam: false,
         // PBW 0505_2018
         top: 80,
+        left: 'center',
         label: {
           normal: {
             show: true,
