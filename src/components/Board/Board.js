@@ -4,7 +4,8 @@ import ReactEcharts from 'echarts-for-react';
 import './Board.scss';
 
 
-const Board = ({model_id, model_graph}) => {
+
+const Board = ({model_id, model_graph,container}) => {
   const data = model_graph['graph']['data'];
   const links = model_graph['graph']['links'];
   const tooltip = model_graph['tooltip'];
@@ -43,8 +44,8 @@ const Board = ({model_id, model_graph}) => {
         // roam: true,
         roam: false,
         // PBW 0505_2018
-        top: 80,
-        left: 'center',
+        top: 100,
+        left: 100,
         label: {
           normal: {
             show: true,
@@ -73,14 +74,33 @@ const Board = ({model_id, model_graph}) => {
     ]
   };
 
+  //차트이벤트///////////
+  const onEvents = {
+    /*
+    params.data
+      name : "max_pooling2d_1"
+      value:"MaxPooling2D"
+      x:0
+      y:991.2
+     */
+    'click': function (params) {
+      const layerName = params.data.name
+      console.log(layerName);
+      container.onClickLayer(model_id, layerName);
+    },
+    'legendselectchanged': this.onChartLegendselectchanged
+  }
+
   return (
     <div className="Board">
       <ReactEcharts
         option={option}
+        onEvents={onEvents}
       />
     </div>
   );
 };
+
 
 Board.propTypes = {
   model_id: PropTypes.number,
@@ -93,3 +113,5 @@ Board.defaultProps = {
 };
 
 export default Board;
+
+

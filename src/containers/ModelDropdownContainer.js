@@ -10,7 +10,6 @@ class ModelDropdownContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log("???");
     this.changeModel = this.changeModel.bind(this);
     this.toggle = this.toggle.bind(this);
 
@@ -21,6 +20,7 @@ class ModelDropdownContainer extends React.Component {
 
   changeModel(modelID) {
     const {model_graphs, onAddModelGraph, onSetModel} = this.props;
+    console.log('called??')
 
     if (model_graphs && !model_graphs.get(modelID)) {
       axios.get(API_URL + `/layers/${modelID}`)

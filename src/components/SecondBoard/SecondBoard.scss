@@ -1,0 +1,19 @@
+.SecondBoard {
+  position: fixed;
+  height:100%;
+  top:69px;
+  left: 50%;
+  bottom: 0;
+  right: 0;
+  background-color: cornsilk;
+  > div {
+    width : 300px;
+    height: 300px !important;
+    overflow: hidden;
+
+    > object {
+      display: none !important;
+    }
+  }
+
+}
