@@ -29,12 +29,22 @@ class BoardContainer extends React.Component {
     //     })
     // }
   }
-  onClickLayer(model_id,layer_name){
-    const { clickLayer} = this.props;
-    clickLayer(model_id,layer_name);
+
+  clickLayer(model_id, layer_name) {
+    const {onClickLayer} = this.props;
+
+    axios.get(API_URL + '/filters/', {
+        params: {
+          model_id: model_id,
+          layer_name: layer_name
+        }
+      }
+    )
+      .then(response => {
+        const filters= response.data;
+        onClickLayer(model_id, layer_name, filters);
+      })
   }
-
-
 
 
   render() {
@@ -61,7 +71,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onAddModelGraph: (modelID, modelGraph) => dispatch(modelActions.addModelGraph(modelID, modelGraph)),
   onSetModel: (modelID) => dispatch(modelActions.setModel(modelID)),
-  clickLayer: (modelId, layerName) => dispatch(boardActions.clickLayer(modelId, layerName))
+  onClickLayer: (modelId, layerName,filters) => dispatch(boardActions.onClickLayer(modelId, layerName,filters)),
 });
 
 

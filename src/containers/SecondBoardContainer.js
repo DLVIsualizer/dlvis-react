@@ -3,18 +3,20 @@ import {connect} from 'react-redux';
 import {SecondBoard} from '../components/index';
 
 class SecondBoardContainer extends React.Component {
+
   componentDidMount() {
     const {model_id, layer_name } = this.props;
   }
 
 
+
   render() {
-    const {model_id, layer_name } = this.props;
+    const {model_id, layer_name, filters} = this.props;
 
     return (
       <div>
         {
-          <SecondBoard model_id={model_id} layer_name={layer_name}/>
+          <SecondBoard model_id={model_id} layer_name={layer_name} filters={filters}/>
         }
       </div>
     )
@@ -23,7 +25,8 @@ class SecondBoardContainer extends React.Component {
 
 const mapStateToProps = (state) => ({
   model_id: state.models.get('model_id'),
-  layer_name: state.board.layer_name
+  layer_name: state.board.layer_name,
+  filters:state.board.filters
 });
 
 

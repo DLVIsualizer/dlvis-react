@@ -1,20 +1,31 @@
-const CLICK_LAYER= 'CLICK_LAYER';
+import {Map, List} from 'immutable';
 
-export const clickLayer= (modelId, layerName) => ({
+const CLICK_LAYER = 'CLICK_LAYER';
+
+export const onClickLayer = (modelId, layerName, filters) => ({
   type: CLICK_LAYER,
-  id:layerName
+  payload: {
+    id: modelId,
+    layer: layerName,
+    filters: filters
+  }
 });
+
 
 const initialState = {
   layer_name: '',
+  filters: Array([])
 };
 
 const board = (state = initialState, action) => {
   switch (action.type) {
     case CLICK_LAYER:
-        return  {...state,
-      layer_name: action.id
-    }
+      return {
+        ...state,
+        filters: action.payload.filters,
+        layer_name: action.payload.layer,
+      };
+
     default:
       return state;
   }

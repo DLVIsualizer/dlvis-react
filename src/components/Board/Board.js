@@ -5,12 +5,11 @@ import './Board.scss';
 
 
 
-const Board = ({model_id, model_graph,container}) => {
+const Board = ({model_id, model_graph, container}) => {
   const data = model_graph['graph']['data'];
   const links = model_graph['graph']['links'];
   const tooltip = model_graph['tooltip'];
 
-  // console.log("board model_id", model_id);
   const colors = {
     'InputLayer': '#C9856B',
     'ZeroPadding2D': '#334552',
@@ -85,8 +84,7 @@ const Board = ({model_id, model_graph,container}) => {
      */
     'click': function (params) {
       const layerName = params.data.name
-      console.log(layerName);
-      container.onClickLayer(model_id, layerName);
+      container.clickLayer(model_id, layerName);
     },
     'legendselectchanged': this.onChartLegendselectchanged
   }
