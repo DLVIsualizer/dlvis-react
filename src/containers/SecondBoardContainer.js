@@ -2,11 +2,13 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {SecondBoard} from '../components/index';
 
+
 class SecondBoardContainer extends React.Component {
 
   componentDidMount() {
     const {model_id, layer_name } = this.props;
   }
+
 
 
 

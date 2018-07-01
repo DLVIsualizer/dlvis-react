@@ -1,7 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Map, List} from 'immutable';
-import {Board} from '../components/index';
+// import {Board} from '../components/index';
+import {Board,SecondBoard} from '../components/index';
 import {API_URL} from "../config";
 import axios from "axios/index";
 import * as modelActions from "../store/modules/models";
@@ -49,6 +50,7 @@ class BoardContainer extends React.Component {
   }
 
 
+
   render() {
     const {model_id, model_graph, clickLayer} = this.props;
 
@@ -62,6 +64,7 @@ class BoardContainer extends React.Component {
     )
   }
 }
+
 
 
 const mapStateToProps = (state) => ({

@@ -6,7 +6,12 @@ import ReactEcharts from 'echarts-for-react';
 import {MODEL_NAMES} from "../../constants";
 // import 'echarts-gl'
 
-
+var echartInstance;
+window.addEventListener('resize', function (event) {
+  if (echartInstance) {
+    echartInstance.resize();
+  }
+})
 const SecondBoard = ({model_id, layer_name, filters}) => {
 
 
@@ -16,11 +21,11 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   var yData = [];
 
 
-  const kBoxWidth= 600;
+  const kBoxWidth = 600;
   const kBoxHeight = 600;
   const kROW_SPACE = 20;
   const kCOL_SPACE = 20;
-  const kBoxValidArea= (kBoxWidth-kROW_SPACE)*(kBoxHeight - kCOL_SPACE);
+  const kBoxValidArea = (kBoxWidth - kROW_SPACE) * (kBoxHeight - kCOL_SPACE);
 
   // SecondBoard의 폭 얻어오기
   var boardWidth = 600;
@@ -33,17 +38,17 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     const kFilterNum = filters.length;
     const kDepthNum = filters[0].length;
     const kKernelWidth = filters[0][0].length;
-    const kKernelHeight= filters[0][0][0].length;
-    const kKernelArea= kKernelWidth*kKernelHeight;
+    const kKernelHeight = filters[0][0][0].length;
+    const kKernelArea = kKernelWidth * kKernelHeight;
 
-    const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea/kFilterNum));
+    const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea / kFilterNum));
     const kFilterHeight = kFilterWidth;
 
     console.log(kFilterWidth);
 
 
-    const maxColNum = parseInt((kBoxWidth - kROW_SPACE)/kFilterWidth);
-    const maxRowNum = parseInt((kFilterNum-1)/maxColNum)+1;
+    const maxColNum = parseInt((kBoxWidth - kROW_SPACE) / kFilterWidth);
+    const maxRowNum = parseInt((kFilterNum - 1) / maxColNum) + 1;
     var valMin = Infinity;
     var valMax = -Infinity;
     var dataInDepth = [];
@@ -55,11 +60,11 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       dataInDepth[d] = [];
     }
 
-      // 축 눈금 설정
-    for (var i = 0; i < kKernelWidth*maxColNum; i++) {
+    // 축 눈금 설정
+    for (var i = 0; i < kKernelWidth * maxColNum; i++) {
       xData.push(i);
     }
-    for (var j = 0; j < kKernelHeight*maxRowNum; j++) {
+    for (var j = 0; j < kKernelHeight * maxRowNum; j++) {
       yData.push(j);
     }
 
@@ -72,12 +77,12 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
             valMax = Math.max(valMax, value);
             valMin = Math.min(valMin, value);
 
-            const rowIdx = parseInt(f/ maxColNum);
-            const colIdx = f- rowIdx * maxColNum;
+            const rowIdx = parseInt(f / maxColNum);
+            const colIdx = f - rowIdx * maxColNum;
 
-            const xPos = colIdx*kKernelWidth + i;
-            const yPos = rowIdx*kKernelHeight+ j;
-            dataInDepth[d].push([xPos,yPos,value]);
+            const xPos = colIdx * kKernelWidth + i;
+            const yPos = rowIdx * kKernelHeight + j;
+            dataInDepth[d].push([xPos, yPos, value]);
           }
         }
       }
@@ -89,6 +94,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       legend: {
         type: 'scroll',
         orient: 'vertical',
+        // left:boardWidth-50,
         right: 5,
         top: 20,
         bottom: 200,
@@ -99,8 +105,8 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         right: 90,
         min: valMin,
         max: valMax,
-        text:[valMax.toPrecision(4).toString(),valMin.toPrecision(4).toString()],
-        precision:3,
+        text: [valMax.toPrecision(4).toString(), valMin.toPrecision(4).toString()],
+        precision: 3,
         seriesIndex: [0],
         inRange: {
           // color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
@@ -118,9 +124,9 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       tooltip: {
         position: 'right',
         formatter: function (p) {
-          return 'Filter : '+ parseInt(p.dataIndex/kKernelArea)+
-            '</br>'+
-            ' data : '+p.data;
+          return 'Filter : ' + parseInt(p.dataIndex / kKernelArea) +
+            '</br>' +
+            ' data : ' + p.data;
         }
       },
       grid: [],
@@ -151,45 +157,45 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         data: xData,
         gridIndex: depthIdx,
 
-        min:0,
-        interval:kKernelWidth-1,
+        min: 0,
+        interval: kKernelWidth - 1,
 
-        axisTick:{
-          interval:kKernelWidth-1,
-          alignWithLabel:true,
+        axisTick: {
+          interval: kKernelWidth - 1,
+          alignWithLabel: true,
 
-          inside:true,
-          length:kBoxHeight,
-          lineStyle:{
-            type:'dotted',
+          inside: true,
+          length: kBoxHeight,
+          lineStyle: {
+            type: 'dotted',
           }
         },
-        axisLabel:{
-          interval:kKernelWidth-1,
+        axisLabel: {
+          interval: kKernelWidth - 1,
         },
       });
       option.yAxis.push({
         type: 'category',
         data: yData,
-        left:'right',
+        left: 'right',
         gridIndex: depthIdx,
-        inverse:true,
+        inverse: true,
 
-        min:0,
-        interval:kKernelHeight-1,
+        min: 0,
+        interval: kKernelHeight - 1,
 
-        axisTick:{
-          interval:kKernelHeight-1,
-          alignWithLabel:true,
+        axisTick: {
+          interval: kKernelHeight - 1,
+          alignWithLabel: true,
 
-          inside:true,
-          length:kBoxHeight,
-          lineStyle:{
-            type:'dotted',
+          inside: true,
+          length: kBoxHeight,
+          lineStyle: {
+            type: 'dotted',
           }
         },
-        axisLabel:{
-          interval:kKernelWidth-1,
+        axisLabel: {
+          interval: kKernelWidth - 1,
         },
 
       });
@@ -206,7 +212,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
               borderColor: '#00f',
               borderWidth: 0.5
             },
-            opacity:0.95
+            opacity: 0.95
           },
           animation: false
         }
@@ -220,11 +226,12 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       <h3><Badge color="secondary">LayerName</Badge> {layer_name}</h3>
       <ReactEcharts id='filter'
                     ref={(e) => {
-                      this.echarts_react = e;
                       if (e) {
-                        let echarts_instance = e.getEchartsInstance();
-                        echarts_instance.clear();
-                        echarts_instance.setOption(option);
+                        echartInstance= e.getEchartsInstance();
+                        echartInstance.clear();
+                        echartInstance.setOption(option);
+                        echartInstance.resize();
+
                       }
                     }}
                     option={emptyOption}
@@ -232,6 +239,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     </div>
   );
 }
+
 
 // 멀티플 히트맵
 // const SecondBoard = ({model_id, layer_name, filters}) => {

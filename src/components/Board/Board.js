@@ -3,12 +3,18 @@ import PropTypes from 'prop-types';
 import ReactEcharts from 'echarts-for-react';
 import './Board.scss';
 
+  var echartInstance;
 
-
+  window.addEventListener('resize', function (event) {
+    if (echartInstance) {
+      echartInstance.resize();
+    }
+  })
 const Board = ({model_id, model_graph, container}) => {
   const data = model_graph['graph']['data'];
   const links = model_graph['graph']['links'];
   const tooltip = model_graph['tooltip'];
+
 
   const colors = {
     'InputLayer': '#C9856B',
@@ -51,7 +57,6 @@ const Board = ({model_id, model_graph, container}) => {
             color: 'white',
             fontSize: 15
           },
-
         },
         itemStyle: {
           normal: {
@@ -91,13 +96,21 @@ const Board = ({model_id, model_graph, container}) => {
 
   return (
     <div className="Board">
-      <ReactEcharts
+      <ReactEcharts id='filter'
+                    ref={(e) => {
+                      if (e) {
+                        echartInstance = e.getEchartsInstance();
+                        echartInstance.resize();
+                      }
+
+                    }}
         option={option}
         onEvents={onEvents}
       />
     </div>
   );
 };
+
 
 
 Board.propTypes = {
