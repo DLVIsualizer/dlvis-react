@@ -15,70 +15,95 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   var xData = [];
   var yData = [];
 
-  const kBOX_WIDTH = 100;
-  const kBOX_HEIGHT = 100;
-  const kROW_SPACE = 30;
-  const kCOL_SPACE = 30;
+
+  const kBoxWidth= 600;
+  var kBoxHeight;
 
   // SecondBoard의 폭 얻어오기
-  var width = 600;
+  var boardWidth = 600;
   if (document.getElementById('SecondBoard')) {
-    width = document.getElementById('SecondBoard').offsetWidth;
+    boardWidth = document.getElementById('SecondBoard').offsetWidth;
   }
 
   // Get Data And Option
-  if (filters != null && filters != "" && typeof filters[0] != "number") {
+  if (filters != null && filters != "" && typeof filters == "object") {
+    const kFilterNum = filters.length;
+    const kDepthNum = filters[0].length;
+    const kKernelWidth = filters[0][0].length;
+    const kKernelHeight= filters[0][0][0].length;
+    const kKernelArea= kKernelWidth*kKernelHeight;
+
+    const kFilterWidth = 30;
+    const kFilterHeight = 30;
+    // const onePointSize = 15;
+    // const kFilterWidth = onePointSize*kKernelWidth;
+    // const kFilterHeight = onePointSize*kKernelHeight;
+    const kROW_SPACE = 20;
+    const kCOL_SPACE = 20;
+
+    console.log(typeof filters);
+
+
+    const maxColNum = parseInt((kBoxWidth - kROW_SPACE)/kFilterWidth);
+    const maxRowNum = parseInt((kFilterNum-1)/maxColNum)+1;
+    kBoxHeight = kFilterHeight*maxRowNum;
     // var valMin = Infinity;
     // var valMax = -Infinity;
-    var data = [];
+    var dataInDepth = [];
     var valMin = -1;
     var valMax = 1;
 
-    // data(3차원 배열 선언)
-    data = Array(filters.length);
-    for (var f = 0; f < filters.length; f++) {
-      data[f] = Array(filters[0].length);
-      for (var d = 0; d < filters[0].length; d++) {
-        data[f][d] = [];
-      }
+
+    // dataInDepth(2차원 배열 선언)
+    dataInDepth = Array(kDepthNum);
+    for (var d = 0; d < kDepthNum; d++) {
+      dataInDepth[d] = [];
     }
 
-    // 축 눈금 설정
-    for (var i = 0; i < filters[0][0].length; i++) {
+      // 축 눈금 설정
+    for (var i = 0; i < kKernelWidth*maxColNum; i++) {
       xData.push(i);
     }
-    for (var j = 0; j < filters[0][0][0].length; j++) {
+    for (var j = 0; j < kKernelHeight*maxRowNum; j++) {
       yData.push(j);
     }
 
     // Max,Min, Echart가 표시할 데이터 설정
-    for (var f = 0; f < filters.length; f++) {
-      for (var d = 0; d < filters[0].length; d++) {
-        for (var i = 0; i < filters[0][0].length; i++) {
-          for (var j = 0; j < filters[0][0][0].length; j++) {
+    for (var f = 0; f < kFilterNum; f++) {
+      for (var d = 0; d < kDepthNum; d++) {
+        for (var i = 0; i < kKernelWidth; i++) {
+          for (var j = 0; j < kKernelHeight; j++) {
             const value = filters[f][d][i][j];
             valMax = Math.max(valMax, value);
             valMin = Math.min(valMin, value);
-            data[f][d].push([i,j,value]);
+
+            const rowIdx = parseInt(f/ maxColNum);
+            const colIdx = f- rowIdx * maxColNum;
+
+            const xPos = colIdx*kKernelWidth + i;
+            const yPos = rowIdx*kKernelHeight+ j;
+            dataInDepth[d].push([xPos,yPos,value]);
           }
         }
       }
     }
 
     // boxWidth는 고정시키고 그에 따라 symbolSize 설정
-    const symbolSize = kBOX_WIDTH / filters[0][0].length;
+    const symbolSize = kFilterWidth / filters[0][0].length;
 
     //기본 옵션 설정
     option = {
       legend: {
-        left: 'right',
         type: 'scroll',
         orient: 'vertical',
+        right: 5,
+        top: 20,
+        bottom: 200,
         selectedMode: 'single',
       },
       visualMap: {
         top: 0,
-        right: 80,
+        right: 90,
         min: valMin,
         max: valMax,
         seriesIndex: [0],
@@ -96,7 +121,12 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         }
       },
       tooltip: {
-        position: 'right'
+        position: 'right',
+        formatter: function (p) {
+          return 'Filter : '+ parseInt(p.dataIndex/kKernelArea)+
+            '</br>'+
+            ' data : '+p.data;
+        }
       },
       grid: [],
       xAxis: [],
@@ -106,56 +136,65 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
     // f 개의 grid,xAxis,yAxis 추가
     // f * d개의 series 추가
-    for (var filterIdx = 0; filterIdx < filters.length; filterIdx++) {
-      const maxColNum = parseInt(((width - kBOX_WIDTH) - kROW_SPACE) / (kROW_SPACE + kBOX_WIDTH));
-      const rowIdx = parseInt(filterIdx / maxColNum);
-      const colIdx = filterIdx - rowIdx * maxColNum;
-      var left = kROW_SPACE + (kROW_SPACE + kBOX_WIDTH) * colIdx;
-      var top = rowIdx * (kCOL_SPACE + kBOX_HEIGHT);
-
+    for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
 
       option.grid.push({
-        left: left,
+        left: kROW_SPACE,
+        top: kCOL_SPACE,
+        // left:0,
+        // top:0,
         right: 0,
-        top: top,
         bottom: 0,
-        width: kBOX_WIDTH,
-        height: kBOX_HEIGHT
+        width: kBoxWidth,
+        height: kBoxHeight
       });
-      option.brush.xAxisIndex && option.brush.xAxisIndex.push(filterIdx);
-      option.brush.yAxisIndex && option.brush.yAxisIndex.push(filterIdx);
+      option.brush.xAxisIndex && option.brush.xAxisIndex.push(depthIdx);
+      option.brush.yAxisIndex && option.brush.yAxisIndex.push(depthIdx);
 
       option.xAxis.push({
         type: 'category',
         data: xData,
-        gridIndex: filterIdx,
+        gridIndex: depthIdx,
+
+        interval:kKernelWidth-1,
+
+        axisTick:{
+          interval:kKernelWidth-1,
+          alignWithLabel:true
+        },
       });
       option.yAxis.push({
         type: 'category',
         data: yData,
-        gridIndex: filterIdx,
-      });
-      for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
-        option.series.push(
-          {
-            name: 'depth'+depthIdx,
-            type: 'heatmap',
-            data: data[filterIdx][depthIdx],
-            xAxisIndex: filterIdx,
-            yAxisIndex: filterIdx,
+        left:'right',
+        gridIndex: depthIdx,
+        inverse:true,
+        interval:kKernelHeight-1,
+        axisTick:{
+          interval:kKernelHeight-1,
+          alignWithLabel:true
+        },
 
-            itemStyle: {
-              emphasis: {
-                borderColor: '#333',
-                borderWidth: 1
-              }
+      });
+      option.series.push(
+        {
+          name: 'depth' + depthIdx,
+          type: 'heatmap',
+          data: dataInDepth[depthIdx],
+          xAxisIndex: depthIdx,
+          yAxisIndex: depthIdx,
+
+          itemStyle: {
+            emphasis: {
+              borderColor: '#00f',
+              borderWidth: 0.5
             },
-            progressive: 1000,
-            animation: false
-          }
-        )
-        option.visualMap.seriesIndex.push(option.series.length - 1);
-      }
+            opacity:0.8
+          },
+          animation: false
+        }
+      )
+      option.visualMap.seriesIndex.push(option.series.length - 1);
     }
   }
 
@@ -175,7 +214,178 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       />
     </div>
   );
-};
+}
+
+// 멀티플 히트맵
+// const SecondBoard = ({model_id, layer_name, filters}) => {
+//
+//
+//   const emptyOption = {};
+//   var option = {};
+//   var xData = [];
+//   var yData = [];
+//
+//   const kBOX_WIDTH = 50;
+//   const kBOX_HEIGHT = 50;
+//   const kROW_SPACE = 30;
+//   const kCOL_SPACE = 30;
+//
+//   // SecondBoard의 폭 얻어오기
+//   var width = 600;
+//   if (document.getElementById('SecondBoard')) {
+//     width = document.getElementById('SecondBoard').offsetWidth;
+//   }
+//
+//   // Get Data And Option
+//   if (filters != null && filters != "" && typeof filters[0] != "number") {
+//     // var valMin = Infinity;
+//     // var valMax = -Infinity;
+//     var data = [];
+//     var valMin = -1;
+//     var valMax = 1;
+//
+//     // data(3차원 배열 선언)
+//     data = Array(filters.length);
+//     for (var f = 0; f < filters.length; f++) {
+//       data[f] = Array(filters[0].length);
+//       for (var d = 0; d < filters[0].length; d++) {
+//         data[f][d] = [];
+//       }
+//     }
+//
+//     // 축 눈금 설정
+//     for (var i = 0; i < filters[0][0].length; i++) {
+//       xData.push(i);
+//     }
+//     for (var j = 0; j < filters[0][0][0].length; j++) {
+//       yData.push(j);
+//     }
+//
+//     // Max,Min, Echart가 표시할 데이터 설정
+//     for (var f = 0; f < filters.length; f++) {
+//       for (var d = 0; d < filters[0].length; d++) {
+//         for (var i = 0; i < filters[0][0].length; i++) {
+//           for (var j = 0; j < filters[0][0][0].length; j++) {
+//             const value = filters[f][d][i][j];
+//             valMax = Math.max(valMax, value);
+//             valMin = Math.min(valMin, value);
+//             data[f][d].push([i,j,value]);
+//           }
+//         }
+//       }
+//     }
+//
+//     // boxWidth는 고정시키고 그에 따라 symbolSize 설정
+//     const symbolSize = kBOX_WIDTH / filters[0][0].length;
+//
+//     //기본 옵션 설정
+//     option = {
+//       legend: {
+//         left: 'right',
+//         type: 'scroll',
+//         orient: 'vertical',
+//         selectedMode: 'single',
+//       },
+//       visualMap: {
+//         top: 0,
+//         right: 80,
+//         min: valMin,
+//         max: valMax,
+//         seriesIndex: [0],
+//         inRange: {
+//           // color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+//           color: ['#000000', '#ffffff']
+//         }
+//       },
+//       brush: {
+//         brushLink: 'all',
+//         xAxisIndex: [],
+//         yAxisIndex: [],
+//         inBrush: {
+//           opacity: 1
+//         }
+//       },
+//       tooltip: {
+//         position: 'right'
+//       },
+//       grid: [],
+//       xAxis: [],
+//       yAxis: [],
+//       series: []
+//     }
+//
+//     // f 개의 grid,xAxis,yAxis 추가
+//     // f * d개의 series 추가
+//     for (var filterIdx = 0; filterIdx < filters.length; filterIdx++) {
+//       const maxColNum = parseInt(((width - kBOX_WIDTH) - kROW_SPACE) / (kROW_SPACE + kBOX_WIDTH));
+//       const rowIdx = parseInt(filterIdx / maxColNum);
+//       const colIdx = filterIdx - rowIdx * maxColNum;
+//       var left = kROW_SPACE + (kROW_SPACE + kBOX_WIDTH) * colIdx;
+//       var top = rowIdx * (kCOL_SPACE + kBOX_HEIGHT);
+//
+//
+//       option.grid.push({
+//         left: left,
+//         right: 0,
+//         top: top,
+//         bottom: 0,
+//         width: kBOX_WIDTH,
+//         height: kBOX_HEIGHT
+//       });
+//       option.brush.xAxisIndex && option.brush.xAxisIndex.push(filterIdx);
+//       option.brush.yAxisIndex && option.brush.yAxisIndex.push(filterIdx);
+//
+//       option.xAxis.push({
+//         type: 'category',
+//         data: xData,
+//         gridIndex: filterIdx,
+//       });
+//       option.yAxis.push({
+//         type: 'category',
+//         data: yData,
+//         gridIndex: filterIdx,
+//       });
+//       for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
+//         option.series.push(
+//           {
+//             name: 'depth'+depthIdx,
+//             type: 'heatmap',
+//             data: data[filterIdx][depthIdx],
+//             xAxisIndex: filterIdx,
+//             yAxisIndex: filterIdx,
+//
+//             itemStyle: {
+//               emphasis: {
+//                 borderColor: '#333',
+//                 borderWidth: 1
+//               }
+//             },
+//             progressive: 1000,
+//             animation: false
+//           }
+//         )
+//         option.visualMap.seriesIndex.push(option.series.length - 1);
+//       }
+//     }
+//   }
+//
+//   return (
+//     <div className="SecondBoard" id='SecondBoard'>
+//       <h3><Badge color="secondary">LayerName</Badge> {layer_name}</h3>
+//       <ReactEcharts id='filter'
+//                     ref={(e) => {
+//                       this.echarts_react = e;
+//                       if (e) {
+//                         let echarts_instance = e.getEchartsInstance();
+//                         echarts_instance.clear();
+//                         echarts_instance.setOption(option);
+//                       }
+//                     }}
+//                     option={emptyOption}
+//       />
+//     </div>
+//   );
+// };
 
 //
 ///////////////////////////////////////////////////////////////////////
