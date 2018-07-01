@@ -156,7 +156,13 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
         axisTick:{
           interval:kKernelWidth-1,
-          alignWithLabel:true
+          alignWithLabel:true,
+
+          inside:true,
+          length:kBoxHeight,
+          lineStyle:{
+            type:'dotted',
+          }
         },
         axisLabel:{
           interval:kKernelWidth-1,
@@ -174,7 +180,13 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
         axisTick:{
           interval:kKernelHeight-1,
-          alignWithLabel:true
+          alignWithLabel:true,
+
+          inside:true,
+          length:kBoxHeight,
+          lineStyle:{
+            type:'dotted',
+          }
         },
         axisLabel:{
           interval:kKernelWidth-1,
@@ -194,7 +206,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
               borderColor: '#00f',
               borderWidth: 0.5
             },
-            opacity:0.8
+            opacity:0.95
           },
           animation: false
         }

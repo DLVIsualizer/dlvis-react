@@ -31,7 +31,9 @@ class BoardContainer extends React.Component {
   }
 
   clickLayer(model_id, layer_name) {
-    const {onClickLayer} = this.props;
+    const {layer_name_prop,onClickLayer} = this.props;
+
+    if(layer_name_prop == layer_name) return;
 
     axios.get(API_URL + '/filters/', {
         params: {
@@ -64,7 +66,8 @@ class BoardContainer extends React.Component {
 
 const mapStateToProps = (state) => ({
   model_id: state.models.get('model_id'),
-  model_graph: state.models.get('model_graph')
+  model_graph: state.models.get('model_graph'),
+  layer_name_prop: state.board.layer_name,
 });
 
 
