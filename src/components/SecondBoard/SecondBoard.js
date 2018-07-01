@@ -17,7 +17,10 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
 
   const kBoxWidth= 600;
-  var kBoxHeight;
+  const kBoxHeight = 600;
+  const kROW_SPACE = 20;
+  const kCOL_SPACE = 20;
+  const kBoxValidArea= (kBoxWidth-kROW_SPACE)*(kBoxHeight - kCOL_SPACE);
 
   // SecondBoard의 폭 얻어오기
   var boardWidth = 600;
@@ -33,25 +36,17 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     const kKernelHeight= filters[0][0][0].length;
     const kKernelArea= kKernelWidth*kKernelHeight;
 
-    const kFilterWidth = 30;
-    const kFilterHeight = 30;
-    // const onePointSize = 15;
-    // const kFilterWidth = onePointSize*kKernelWidth;
-    // const kFilterHeight = onePointSize*kKernelHeight;
-    const kROW_SPACE = 20;
-    const kCOL_SPACE = 20;
+    const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea/kFilterNum));
+    const kFilterHeight = kFilterWidth;
 
-    console.log(typeof filters);
+    console.log(kFilterWidth);
 
 
     const maxColNum = parseInt((kBoxWidth - kROW_SPACE)/kFilterWidth);
     const maxRowNum = parseInt((kFilterNum-1)/maxColNum)+1;
-    kBoxHeight = kFilterHeight*maxRowNum;
-    // var valMin = Infinity;
-    // var valMax = -Infinity;
+    var valMin = Infinity;
+    var valMax = -Infinity;
     var dataInDepth = [];
-    var valMin = -1;
-    var valMax = 1;
 
 
     // dataInDepth(2차원 배열 선언)
@@ -88,8 +83,6 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       }
     }
 
-    // boxWidth는 고정시키고 그에 따라 symbolSize 설정
-    const symbolSize = kFilterWidth / filters[0][0].length;
 
     //기본 옵션 설정
     option = {
@@ -106,6 +99,8 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         right: 90,
         min: valMin,
         max: valMax,
+        text:[valMax.toPrecision(4).toString(),valMin.toPrecision(4).toString()],
+        precision:3,
         seriesIndex: [0],
         inRange: {
           // color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
@@ -156,11 +151,15 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         data: xData,
         gridIndex: depthIdx,
 
+        min:0,
         interval:kKernelWidth-1,
 
         axisTick:{
           interval:kKernelWidth-1,
           alignWithLabel:true
+        },
+        axisLabel:{
+          interval:kKernelWidth-1,
         },
       });
       option.yAxis.push({
@@ -169,10 +168,16 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         left:'right',
         gridIndex: depthIdx,
         inverse:true,
+
+        min:0,
         interval:kKernelHeight-1,
+
         axisTick:{
           interval:kKernelHeight-1,
           alignWithLabel:true
+        },
+        axisLabel:{
+          interval:kKernelWidth-1,
         },
 
       });
