@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Badge} from 'reactstrap';
-import './SecondBoard.scss';
+import styles from './SecondBoard.scss';
 import ReactEcharts from 'echarts-for-react';
 import {MODEL_NAMES} from "../../constants";
 // import 'echarts-gl'
 
-var echartInstance;
+var secondEchartInstance;
 window.addEventListener('resize', function (event) {
-  if (echartInstance) {
-    echartInstance.resize();
+  if (secondEchartInstance) {
+    secondEchartInstance.resize();
   }
 })
 const SecondBoard = ({model_id, layer_name, filters}) => {
@@ -21,8 +21,9 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   var yData = [];
 
 
-  const kBoxWidth = 600;
-  const kBoxHeight = 600;
+
+  const kBoxWidth = styles.boxWidth;
+  const kBoxHeight = styles.boxHeight;
   const kROW_SPACE = 20;
   const kCOL_SPACE = 20;
   const kBoxValidArea = (kBoxWidth - kROW_SPACE) * (kBoxHeight - kCOL_SPACE);
@@ -137,7 +138,8 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
     // f 개의 grid,xAxis,yAxis 추가
     // f * d개의 series 추가
-    for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
+    // for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
+    for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
 
       option.grid.push({
         left: kROW_SPACE,
@@ -227,11 +229,11 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       <ReactEcharts id='filter'
                     ref={(e) => {
                       if (e) {
-                        echartInstance= e.getEchartsInstance();
-                        echartInstance.clear();
-                        echartInstance.setOption(option);
-                        echartInstance.resize();
-
+                        secondEchartInstance= e.getEchartsInstance();
+                        secondEchartInstance.clear();
+                        secondEchartInstance.setOption(option);
+                        secondEchartInstance.resize();
+                        secondEchartInstance.hideLoading();
                       }
                     }}
                     option={emptyOption}
@@ -670,3 +672,4 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
 
 export default SecondBoard;
+export {secondEchartInstance};

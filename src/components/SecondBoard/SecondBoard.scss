@@ -1,3 +1,6 @@
+$BoxWidth:600;
+$BoxHeight:600;
+
 .SecondBoard {
   position: fixed;
   height:100%;
@@ -9,13 +12,17 @@
   background-color: cornsilk;
 
   > div {
-    height: 100% !important;
+    height: 70% !important;
+    //height: % !important;
     overflow: hidden;
 
     > object {
       display: none !important;
     }
   }
+}
 
-
+:export {
+  boxWidth:$BoxWidth;
+  boxHeight:$BoxHeight;
 }

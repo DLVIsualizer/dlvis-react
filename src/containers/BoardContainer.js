@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Map, List} from 'immutable';
 // import {Board} from '../components/index';
 import {Board,SecondBoard} from '../components/index';
+import {secondEchartInstance} from '../components/SecondBoard/SecondBoard';
 import {API_URL} from "../config";
 import axios from "axios/index";
 import * as modelActions from "../store/modules/models";
@@ -35,6 +36,10 @@ class BoardContainer extends React.Component {
     const {layer_name_prop,onClickLayer} = this.props;
 
     if(layer_name_prop == layer_name) return;
+
+    if(secondEchartInstance){
+      secondEchartInstance.showLoading();
+    }
 
     axios.get(API_URL + '/filters/', {
         params: {
