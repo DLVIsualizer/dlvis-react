@@ -1,5 +1,7 @@
 $BoxWidth:600;
 $BoxHeight:600;
+$RowSpace:20;
+$ColSpace:20;
 
 .SecondBoard {
   position: fixed;
@@ -23,6 +25,8 @@ $BoxHeight:600;
 }
 
 :export {
-  boxWidth:$BoxWidth;
-  boxHeight:$BoxHeight;
+  BoxWidth:$BoxWidth;
+  BoxHeight:$BoxHeight;
+  RowSpace:$RowSpace;
+  ColSpace:$ColSpace;
 }

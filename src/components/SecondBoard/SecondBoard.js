@@ -12,6 +12,7 @@ window.addEventListener('resize', function (event) {
     secondEchartInstance.resize();
   }
 })
+
 const SecondBoard = ({model_id, layer_name, filters}) => {
 
 
@@ -21,13 +22,6 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   var yData = [];
 
 
-
-  const kBoxWidth = styles.boxWidth;
-  const kBoxHeight = styles.boxHeight;
-  const kROW_SPACE = 20;
-  const kCOL_SPACE = 20;
-  const kBoxValidArea = (kBoxWidth - kROW_SPACE) * (kBoxHeight - kCOL_SPACE);
-
   // SecondBoard의 폭 얻어오기
   var boardWidth = 600;
   if (document.getElementById('SecondBoard')) {
@@ -35,31 +29,31 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   }
 
   // Get Data And Option
-  if (filters != null && filters != "" && typeof filters == "object") {
-    const kFilterNum = filters.length;
-    const kDepthNum = filters[0].length;
-    const kKernelWidth = filters[0][0].length;
-    const kKernelHeight = filters[0][0][0].length;
+  if (filters != null  && filters.head){
+    console.log('getin');
+    console.log(filters);
+    const kBoxWidth = styles.BoxWidth;
+    const kBoxHeight = styles.BoxHeight;
+    const kRowSpace= styles.RowSpace;
+    const kColSpace= styles.ColSpace;
+    const kBoxValidArea = (kBoxWidth - kRowSpace) * (kBoxHeight - kColSpace);
+
+    const kFilterNum = filters.head.filterNum;
+    const kDepthNum = filters.head.depthNum;
+    const kKernelWidth = filters.head.kernelWidth;
+    const kKernelHeight = filters.head.kernelHeight;
+    var valMin= filters.head.valMin;
+    var valMax = filters.head.valMax;
     const kKernelArea = kKernelWidth * kKernelHeight;
 
     const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea / kFilterNum));
     const kFilterHeight = kFilterWidth;
 
-    console.log(kFilterWidth);
-
-
-    const maxColNum = parseInt((kBoxWidth - kROW_SPACE) / kFilterWidth);
+    const maxColNum = parseInt((kBoxWidth - kRowSpace) / kFilterWidth);
     const maxRowNum = parseInt((kFilterNum - 1) / maxColNum) + 1;
-    var valMin = Infinity;
-    var valMax = -Infinity;
     var dataInDepth = [];
 
 
-    // dataInDepth(2차원 배열 선언)
-    dataInDepth = Array(kDepthNum);
-    for (var d = 0; d < kDepthNum; d++) {
-      dataInDepth[d] = [];
-    }
 
     // 축 눈금 설정
     for (var i = 0; i < kKernelWidth * maxColNum; i++) {
@@ -68,27 +62,11 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     for (var j = 0; j < kKernelHeight * maxRowNum; j++) {
       yData.push(j);
     }
+    // dataInDepth(2차원 배열 선언)
+    dataInDepth = filters.dataInDepth;
 
-    // Max,Min, Echart가 표시할 데이터 설정
-    for (var f = 0; f < kFilterNum; f++) {
-      for (var d = 0; d < kDepthNum; d++) {
-        for (var i = 0; i < kKernelWidth; i++) {
-          for (var j = 0; j < kKernelHeight; j++) {
-            const value = filters[f][d][i][j];
-            valMax = Math.max(valMax, value);
-            valMin = Math.min(valMin, value);
-
-            const rowIdx = parseInt(f / maxColNum);
-            const colIdx = f - rowIdx * maxColNum;
-
-            const xPos = colIdx * kKernelWidth + i;
-            const yPos = rowIdx * kKernelHeight + j;
-            dataInDepth[d].push([xPos, yPos, value]);
-          }
-        }
-      }
-    }
-
+    console.log('data');
+    console.log(dataInDepth);
 
     //기본 옵션 설정
     option = {
@@ -142,8 +120,8 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
 
       option.grid.push({
-        left: kROW_SPACE,
-        top: kCOL_SPACE,
+        left: kRowSpace,
+        top: kColSpace,
         // left:0,
         // top:0,
         right: 0,
@@ -240,6 +218,235 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       />
     </div>
   );
+
+// const SecondBoard = ({model_id, layer_name, filters}) => {
+//
+//
+//   const emptyOption = {};
+//   var option = {};
+//   var xData = [];
+//   var yData = [];
+//
+//
+//
+//   const kBoxWidth = styles.boxWidth;
+//   const kBoxHeight = styles.boxHeight;
+//   const kROW_SPACE = 20;
+//   const kCOL_SPACE = 20;
+//   const kBoxValidArea = (kBoxWidth - kROW_SPACE) * (kBoxHeight - kCOL_SPACE);
+//
+//   // SecondBoard의 폭 얻어오기
+//   var boardWidth = 600;
+//   if (document.getElementById('SecondBoard')) {
+//     boardWidth = document.getElementById('SecondBoard').offsetWidth;
+//   }
+//
+//   // Get Data And Option
+//   if (filters != null && filters != "" && typeof filters == "object") {
+//     const kFilterNum = filters.length;
+//     const kDepthNum = filters[0].length;
+//     const kKernelWidth = filters[0][0].length;
+//     const kKernelHeight = filters[0][0][0].length;
+//     const kKernelArea = kKernelWidth * kKernelHeight;
+//
+//     const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea / kFilterNum));
+//     const kFilterHeight = kFilterWidth;
+//
+//     console.log(kFilterWidth);
+//
+//
+//     const maxColNum = parseInt((kBoxWidth - kROW_SPACE) / kFilterWidth);
+//     const maxRowNum = parseInt((kFilterNum - 1) / maxColNum) + 1;
+//     var valMin = Infinity;
+//     var valMax = -Infinity;
+//     var dataInDepth = [];
+//
+//
+//     // dataInDepth(2차원 배열 선언)
+//     dataInDepth = Array(kDepthNum);
+//     for (var d = 0; d < kDepthNum; d++) {
+//       dataInDepth[d] = [];
+//     }
+//
+//     // 축 눈금 설정
+//     for (var i = 0; i < kKernelWidth * maxColNum; i++) {
+//       xData.push(i);
+//     }
+//     for (var j = 0; j < kKernelHeight * maxRowNum; j++) {
+//       yData.push(j);
+//     }
+//
+//     // Max,Min, Echart가 표시할 데이터 설정
+//     for (var f = 0; f < kFilterNum; f++) {
+//       for (var d = 0; d < kDepthNum; d++) {
+//         for (var i = 0; i < kKernelWidth; i++) {
+//           for (var j = 0; j < kKernelHeight; j++) {
+//             const value = filters[f][d][i][j];
+//             valMax = Math.max(valMax, value);
+//             valMin = Math.min(valMin, value);
+//
+//             const rowIdx = parseInt(f / maxColNum);
+//             const colIdx = f - rowIdx * maxColNum;
+//
+//             const xPos = colIdx * kKernelWidth + i;
+//             const yPos = rowIdx * kKernelHeight + j;
+//             dataInDepth[d].push([xPos, yPos, value]);
+//           }
+//         }
+//       }
+//     }
+//
+//
+//     //기본 옵션 설정
+//     option = {
+//       legend: {
+//         type: 'scroll',
+//         orient: 'vertical',
+//         // left:boardWidth-50,
+//         right: 5,
+//         top: 20,
+//         bottom: 200,
+//         selectedMode: 'single',
+//       },
+//       visualMap: {
+//         top: 0,
+//         right: 90,
+//         min: valMin,
+//         max: valMax,
+//         text: [valMax.toPrecision(4).toString(), valMin.toPrecision(4).toString()],
+//         precision: 3,
+//         seriesIndex: [0],
+//         inRange: {
+//           // color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+//           color: ['#000000', '#ffffff']
+//         }
+//       },
+//       brush: {
+//         brushLink: 'all',
+//         xAxisIndex: [],
+//         yAxisIndex: [],
+//         inBrush: {
+//           opacity: 1
+//         }
+//       },
+//       tooltip: {
+//         position: 'right',
+//         formatter: function (p) {
+//           return 'Filter : ' + parseInt(p.dataIndex / kKernelArea) +
+//             '</br>' +
+//             ' data : ' + p.data;
+//         }
+//       },
+//       grid: [],
+//       xAxis: [],
+//       yAxis: [],
+//       series: []
+//     }
+//
+//     // f 개의 grid,xAxis,yAxis 추가
+//     // f * d개의 series 추가
+//     // for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
+//     for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
+//
+//       option.grid.push({
+//         left: kROW_SPACE,
+//         top: kCOL_SPACE,
+//         // left:0,
+//         // top:0,
+//         right: 0,
+//         bottom: 0,
+//         width: kBoxWidth,
+//         height: kBoxHeight
+//       });
+//       option.brush.xAxisIndex && option.brush.xAxisIndex.push(depthIdx);
+//       option.brush.yAxisIndex && option.brush.yAxisIndex.push(depthIdx);
+//
+//       option.xAxis.push({
+//         type: 'category',
+//         data: xData,
+//         gridIndex: depthIdx,
+//
+//         min: 0,
+//         interval: kKernelWidth - 1,
+//
+//         axisTick: {
+//           interval: kKernelWidth - 1,
+//           alignWithLabel: true,
+//
+//           inside: true,
+//           length: kBoxHeight,
+//           lineStyle: {
+//             type: 'dotted',
+//           }
+//         },
+//         axisLabel: {
+//           interval: kKernelWidth - 1,
+//         },
+//       });
+//       option.yAxis.push({
+//         type: 'category',
+//         data: yData,
+//         left: 'right',
+//         gridIndex: depthIdx,
+//         inverse: true,
+//
+//         min: 0,
+//         interval: kKernelHeight - 1,
+//
+//         axisTick: {
+//           interval: kKernelHeight - 1,
+//           alignWithLabel: true,
+//
+//           inside: true,
+//           length: kBoxHeight,
+//           lineStyle: {
+//             type: 'dotted',
+//           }
+//         },
+//         axisLabel: {
+//           interval: kKernelWidth - 1,
+//         },
+//
+//       });
+//       option.series.push(
+//         {
+//           name: 'depth' + depthIdx,
+//           type: 'heatmap',
+//           data: dataInDepth[depthIdx],
+//           xAxisIndex: depthIdx,
+//           yAxisIndex: depthIdx,
+//
+//           itemStyle: {
+//             emphasis: {
+//               borderColor: '#00f',
+//               borderWidth: 0.5
+//             },
+//             opacity: 0.95
+//           },
+//           animation: false
+//         }
+//       )
+//       option.visualMap.seriesIndex.push(option.series.length - 1);
+//     }
+//   }
+//
+//   return (
+//     <div className="SecondBoard" id='SecondBoard'>
+//       <h3><Badge color="secondary">LayerName</Badge> {layer_name}</h3>
+//       <ReactEcharts id='filter'
+//                     ref={(e) => {
+//                       if (e) {
+//                         secondEchartInstance= e.getEchartsInstance();
+//                         secondEchartInstance.clear();
+//                         secondEchartInstance.setOption(option);
+//                         secondEchartInstance.resize();
+//                         secondEchartInstance.hideLoading();
+//                       }
+//                     }}
+//                     option={emptyOption}
+//       />
+//     </div>
+//   );
 }
 
 

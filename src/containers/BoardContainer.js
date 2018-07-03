@@ -4,6 +4,7 @@ import {Map, List} from 'immutable';
 // import {Board} from '../components/index';
 import {Board,SecondBoard} from '../components/index';
 import {secondEchartInstance} from '../components/SecondBoard/SecondBoard';
+import SecondBoardStyle from '../components/SecondBoard/SecondBoard.scss';
 import {API_URL} from "../config";
 import axios from "axios/index";
 import * as modelActions from "../store/modules/models";
@@ -44,7 +45,11 @@ class BoardContainer extends React.Component {
     axios.get(API_URL + '/filters/', {
         params: {
           model_id: model_id,
-          layer_name: layer_name
+          layer_name: layer_name,
+          box_width:SecondBoardStyle.BoxWidth,
+          box_height:SecondBoardStyle.BoxHeight,
+          row_space:SecondBoardStyle.RowSpace,
+          col_space:SecondBoardStyle.ColSpace
         }
       }
     )

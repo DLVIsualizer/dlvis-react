@@ -14,7 +14,7 @@ export const onClickLayer = (modelId, layerName, filters) => ({
 
 const initialState = {
   layer_name: '',
-  filters: Array([])
+  filters: Array()
 };
 
 const board = (state = initialState, action) => {
