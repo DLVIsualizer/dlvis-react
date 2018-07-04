@@ -29,20 +29,18 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   }
 
   // Get Data And Option
-  if (filters != null  && filters.head){
-    console.log('getin');
-    console.log(filters);
+  if (filters != null && filters.head) {
     const kBoxWidth = styles.BoxWidth;
     const kBoxHeight = styles.BoxHeight;
-    const kRowSpace= styles.RowSpace;
-    const kColSpace= styles.ColSpace;
+    const kRowSpace = styles.RowSpace;
+    const kColSpace = styles.ColSpace;
     const kBoxValidArea = (kBoxWidth - kRowSpace) * (kBoxHeight - kColSpace);
 
     const kFilterNum = filters.head.filterNum;
     const kDepthNum = filters.head.depthNum;
     const kKernelWidth = filters.head.kernelWidth;
     const kKernelHeight = filters.head.kernelHeight;
-    var valMin= filters.head.valMin;
+    var valMin = filters.head.valMin;
     var valMax = filters.head.valMax;
     const kKernelArea = kKernelWidth * kKernelHeight;
 
@@ -51,9 +49,6 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
     const maxColNum = parseInt((kBoxWidth - kRowSpace) / kFilterWidth);
     const maxRowNum = parseInt((kFilterNum - 1) / maxColNum) + 1;
-    var dataInDepth = [];
-
-
 
     // 축 눈금 설정
     for (var i = 0; i < kKernelWidth * maxColNum; i++) {
@@ -63,10 +58,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       yData.push(j);
     }
     // dataInDepth(2차원 배열 선언)
-    dataInDepth = filters.dataInDepth;
-
-    console.log('data');
-    console.log(dataInDepth);
+    const dataInDepth = filters.dataInDepth;
 
     //기본 옵션 설정
     option = {
@@ -88,16 +80,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
         precision: 3,
         seriesIndex: [0],
         inRange: {
-          // color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
           color: ['#000000', '#ffffff']
-        }
-      },
-      brush: {
-        brushLink: 'all',
-        xAxisIndex: [],
-        yAxisIndex: [],
-        inBrush: {
-          opacity: 1
         }
       },
       tooltip: {
@@ -116,22 +99,17 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
     // f 개의 grid,xAxis,yAxis 추가
     // f * d개의 series 추가
-    // for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
-    for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
+    for (var depthIdx = 0; depthIdx < kDepthNum; depthIdx++) {
+    // for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
 
       option.grid.push({
         left: kRowSpace,
         top: kColSpace,
-        // left:0,
-        // top:0,
         right: 0,
         bottom: 0,
         width: kBoxWidth,
         height: kBoxHeight
       });
-      option.brush.xAxisIndex && option.brush.xAxisIndex.push(depthIdx);
-      option.brush.yAxisIndex && option.brush.yAxisIndex.push(depthIdx);
-
       option.xAxis.push({
         type: 'category',
         data: xData,
@@ -189,8 +167,8 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
           itemStyle: {
             emphasis: {
-              borderColor: '#00f',
-              borderWidth: 0.5
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowBlur: 10
             },
             opacity: 0.95
           },
@@ -207,7 +185,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
       <ReactEcharts id='filter'
                     ref={(e) => {
                       if (e) {
-                        secondEchartInstance= e.getEchartsInstance();
+                        secondEchartInstance = e.getEchartsInstance();
                         secondEchartInstance.clear();
                         secondEchartInstance.setOption(option);
                         secondEchartInstance.resize();
