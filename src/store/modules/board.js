@@ -2,19 +2,19 @@ import {Map, List} from 'immutable';
 
 const CLICK_LAYER = 'CLICK_LAYER';
 
-export const onClickLayer = (modelId, layerName, filters) => ({
+export const onClickLayer = (modelId, layerName, filterResponse) => ({
   type: CLICK_LAYER,
   payload: {
     id: modelId,
     layer: layerName,
-    filters: filters
+    filterResponse: filterResponse
   }
 });
 
 
 const initialState = {
   layer_name: '',
-  filters: Array()
+  filters:'#NODEF'
 };
 
 const board = (state = initialState, action) => {
@@ -22,7 +22,7 @@ const board = (state = initialState, action) => {
     case CLICK_LAYER:
       return {
         ...state,
-        filters: action.payload.filters,
+        filterResponse: action.payload.filterResponse,
         layer_name: action.payload.layer,
       };
 

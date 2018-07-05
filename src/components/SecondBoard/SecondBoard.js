@@ -4,6 +4,7 @@ import {Badge} from 'reactstrap';
 import styles from './SecondBoard.scss';
 import ReactEcharts from 'echarts-for-react';
 import {MODEL_NAMES} from "../../constants";
+import nj from 'numjs';
 // import 'echarts-gl'
 
 var secondEchartInstance;
@@ -13,7 +14,7 @@ window.addEventListener('resize', function (event) {
   }
 })
 
-const SecondBoard = ({model_id, layer_name, filters}) => {
+const SecondBoard = ({model_id, layer_name, filterResponse}) => {
 
 
   const emptyOption = {};
@@ -29,19 +30,28 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
   }
 
   // Get Data And Option
-  if (filters != null && filters.head) {
+  if (filterResponse != undefined) {
+
+
+    const starttime = performance.now();
+
+    secondEchartInstance.showLoading('default',{
+      text:'Converting...'
+    });
+
     const kBoxWidth = styles.BoxWidth;
     const kBoxHeight = styles.BoxHeight;
     const kRowSpace = styles.RowSpace;
     const kColSpace = styles.ColSpace;
     const kBoxValidArea = (kBoxWidth - kRowSpace) * (kBoxHeight - kColSpace);
 
-    const kFilterNum = filters.head.filterNum;
-    const kDepthNum = filters.head.depthNum;
-    const kKernelWidth = filters.head.kernelWidth;
-    const kKernelHeight = filters.head.kernelHeight;
-    var valMin = filters.head.valMin;
-    var valMax = filters.head.valMax;
+    const header = filterResponse.headers;
+    const kFilterNum = parseInt(filterResponse.headers.filternum);
+    const kDepthNum = parseInt(filterResponse.headers.depthnum);
+    const kKernelWidth = parseInt(filterResponse.headers.kernelwidth);
+    const kKernelHeight = parseInt(filterResponse.headers.kernelheight);
+    const valMin = parseFloat(filterResponse.headers.valmin);
+    const valMax = parseFloat(filterResponse.headers.valmax);
     const kKernelArea = kKernelWidth * kKernelHeight;
 
     const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea / kFilterNum));
@@ -57,8 +67,24 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     for (var j = 0; j < kKernelHeight * maxRowNum; j++) {
       yData.push(j);
     }
+
+    const pointNum = kFilterNum*kKernelWidth*kKernelHeight;
+    const flattenLen = kDepthNum*pointNum*3;
+    const data = filterResponse.data;
+
+    var buff = Buffer.from(filterResponse.data,"hex");
+    const arrBuff = buff.buffer;
+
+    // 실제 keras모델에서 weight value들은 float32이지만
+    // hex로 직력-역직렬화 도중 float64로 바뀜
+    var floatTA = new Float64Array(arrBuff);
+    var dataNj = nj.float64(floatTA);
+    dataNj = dataNj.reshape(kDepthNum,pointNum,3);
+
     // dataInDepth(2차원 배열 선언)
-    const dataInDepth = filters.dataInDepth;
+    const dataInDepth = dataNj.tolist();
+
+    console.log('Layer:' + layer_name+'] Array shaping time : ' + ((performance.now() - starttime)/1000) + 's');
 
     //기본 옵션 설정
     option = {
@@ -167,7 +193,9 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 
           itemStyle: {
             emphasis: {
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              borderColor:'#f00',
+              borderWidth:1,
+              shadowColor: '#aaa',
               shadowBlur: 10
             },
             opacity: 0.95
@@ -187,6 +215,9 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
                       if (e) {
                         secondEchartInstance = e.getEchartsInstance();
                         secondEchartInstance.clear();
+                        secondEchartInstance.showLoading('default',{
+                          text:'Visualizing...'
+                        });
                         secondEchartInstance.setOption(option);
                         secondEchartInstance.resize();
                         secondEchartInstance.hideLoading();
@@ -197,7 +228,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
     </div>
   );
 
-// const SecondBoard = ({model_id, layer_name, filters}) => {
+// const SecondBoard = ({model_id, layer_name, filterResponse}) => {
 //
 //
 //   const emptyOption = {};
@@ -220,11 +251,11 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 //   }
 //
 //   // Get Data And Option
-//   if (filters != null && filters != "" && typeof filters == "object") {
-//     const kFilterNum = filters.length;
-//     const kDepthNum = filters[0].length;
-//     const kKernelWidth = filters[0][0].length;
-//     const kKernelHeight = filters[0][0][0].length;
+//   if (filterResponse != null && filterResponse != "" && typeof filterResponse == "object") {
+//     const kFilterNum = filterResponse.length;
+//     const kDepthNum = filterResponse[0].length;
+//     const kKernelWidth = filterResponse[0][0].length;
+//     const kKernelHeight = filterResponse[0][0][0].length;
 //     const kKernelArea = kKernelWidth * kKernelHeight;
 //
 //     const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea / kFilterNum));
@@ -259,7 +290,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 //       for (var d = 0; d < kDepthNum; d++) {
 //         for (var i = 0; i < kKernelWidth; i++) {
 //           for (var j = 0; j < kKernelHeight; j++) {
-//             const value = filters[f][d][i][j];
+//             const value = filterResponse[f][d][i][j];
 //             valMax = Math.max(valMax, value);
 //             valMin = Math.min(valMin, value);
 //
@@ -323,7 +354,7 @@ const SecondBoard = ({model_id, layer_name, filters}) => {
 //
 //     // f 개의 grid,xAxis,yAxis 추가
 //     // f * d개의 series 추가
-//     // for (var depthIdx = 0; depthIdx < filters[0].length; depthIdx++) {
+//     // for (var depthIdx = 0; depthIdx < filterResponse[0].length; depthIdx++) {
 //     for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
 //
 //       option.grid.push({

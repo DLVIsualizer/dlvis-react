@@ -39,23 +39,30 @@ class BoardContainer extends React.Component {
     if(layer_name_prop == layer_name) return;
 
     if(secondEchartInstance){
-      secondEchartInstance.showLoading();
+      secondEchartInstance.showLoading('default',{
+        text:'Waiting Response...'
+      });
     }
+    const starttime = performance.now()
 
-    axios.get(API_URL + '/filters/', {
-        params: {
-          model_id: model_id,
-          layer_name: layer_name,
-          box_width:SecondBoardStyle.BoxWidth,
-          box_height:SecondBoardStyle.BoxHeight,
-          row_space:SecondBoardStyle.RowSpace,
-          col_space:SecondBoardStyle.ColSpace
-        }
+    axios({
+      method:'get',
+      url:API_URL+'/filters/',
+      responseType:'application/octet-stream',
+      params: {
+        model_id: model_id,
+        layer_name: layer_name,
+        box_width:SecondBoardStyle.BoxWidth,
+        box_height:SecondBoardStyle.BoxHeight,
+        row_space:SecondBoardStyle.RowSpace,
+        col_space:SecondBoardStyle.ColSpace
       }
-    )
+    })
       .then(response => {
-        const filters= response.data;
-        onClickLayer(model_id, layer_name, filters);
+        console.log('Layer:' + layer_name+'] Response time : ' + ((performance.now() - starttime)/1000) + 's');
+        console.log('content-length : '+response.headers['content-length']
+        );
+        onClickLayer(model_id, layer_name, response);
       })
   }
 
