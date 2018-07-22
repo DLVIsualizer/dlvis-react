@@ -48,7 +48,8 @@ class BoardContainer extends React.Component {
     axios({
       method:'get',
       url:API_URL+'/filters/',
-      responseType:'application/octet-stream',
+      responseType:'arraybuffer',
+      // responseType:'application/octet-stream',
       params: {
         model_id: model_id,
         layer_name: layer_name,
@@ -60,8 +61,8 @@ class BoardContainer extends React.Component {
     })
       .then(response => {
         console.log('Layer:' + layer_name+'] Response time : ' + ((performance.now() - starttime)/1000) + 's');
-        console.log('content-length : '+response.headers['content-length']
-        );
+        const ReadMega = response.headers['content-length'] / Math.pow(2,20);
+        console.log('content-length : '+ReadMega+'mb'    );
         onClickLayer(model_id, layer_name, response);
       })
   }

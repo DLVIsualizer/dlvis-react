@@ -70,16 +70,15 @@ const SecondBoard = ({model_id, layer_name, filterResponse}) => {
 
     const pointNum = kFilterNum*kKernelWidth*kKernelHeight;
     const flattenLen = kDepthNum*pointNum*3;
-    const data = filterResponse.data;
 
-    var buff = Buffer.from(filterResponse.data,"hex");
-    const arrBuff = buff.buffer;
+    const arrBuff = filterResponse.data;
 
     // 실제 keras모델에서 weight value들은 float32이지만
-    // hex로 직력-역직렬화 도중 float64로 바뀜
+    //  numjs로 읽을 시에는 64로 해야함..?!
     var floatTA = new Float64Array(arrBuff);
     var dataNj = nj.float64(floatTA);
     dataNj = dataNj.reshape(kDepthNum,pointNum,3);
+
 
     // dataInDepth(2차원 배열 선언)
     const dataInDepth = dataNj.tolist();
