@@ -90,6 +90,8 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
 
     console.log('Layer:' + layer_name + '] Array shaping time : ' + ((performance.now() - starttime) / 1000) + 's');
 
+    const depthIdx = depth;
+
     //기본 옵션 설정
     option = {
       // legend: {
@@ -121,27 +123,17 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
             ' data : ' + p.data;
         }
       },
-      grid: [],
-      xAxis: [],
-      yAxis: [],
-      series: []
-    }
 
-    // f 개의 grid,xAxis,yAxis 추가
-    // f * d개의 series 추가
-    // for (var depthIdx = 0; depthIdx < kDepthNum; depthIdx++) {
-    // for (var depthIdx = 0; depthIdx < 1; depthIdx++) {
-    for (var depthIdx = depth; depthIdx < depth+1; depthIdx++) {
 
-      option.grid.push({
+      grid: {
         left: kRowSpace,
         top: kColSpace,
         right: 0,
         bottom: 0,
         width: kBoxWidth,
         height: kBoxHeight
-      });
-      option.xAxis.push({
+      },
+      xAxis: {
         type: 'category',
         data: xData,
         gridIndex: 0,
@@ -162,8 +154,8 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
         axisLabel: {
           interval: kKernelWidth - 1,
         },
-      });
-      option.yAxis.push({
+      },
+      yAxis: {
         type: 'category',
         data: yData,
         left: 'right',
@@ -187,8 +179,8 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
           interval: kKernelWidth - 1,
         },
 
-      });
-      option.series.push(
+      },
+      series: (
         {
           name: 'depth' + depthIdx,
           type: 'heatmap',
@@ -206,12 +198,11 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
           animation: false
         }
       )
-      option.visualMap.seriesIndex.push(option.series.length - 1);
     }
   }
 
   const onChangeSlider = (value) => {
-    if(container){
+    if (container) {
       container.changeDepth(value);
     }
   }
@@ -221,7 +212,7 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
       <h3><Badge color="secondary">Depth</Badge>
         <SliderWithTooltip
           min={0}
-          max={kDepthNum-1}
+          max={kDepthNum - 1}
           dots step={1} value={depth}
           tipFormatter={depthIndexFormatter}
           tipProps={{overlayClassName: 'foo'}}
