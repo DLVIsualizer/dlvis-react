@@ -13,12 +13,15 @@ $ColSpace:20;
   right: 0;
   background-color: cornsilk;
 
-  > div {
+  .rc-slider{
+    left:5%;
+    width:90%;
+  }
+  .echarts-for-react{
     height: 70% !important;
-    //height: % !important;
     overflow: hidden;
 
-    > object {
+    > object{
       display: none !important;
     }
   }

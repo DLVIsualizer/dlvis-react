@@ -70,7 +70,7 @@ class BoardContainer extends React.Component {
 
 
   render() {
-    const {model_id, model_graph, clickLayer} = this.props;
+    const {model_id, model_graph} = this.props;
 
     return (
       <div>
@@ -96,6 +96,7 @@ const mapDispatchToProps = (dispatch) => ({
   onAddModelGraph: (modelID, modelGraph) => dispatch(modelActions.addModelGraph(modelID, modelGraph)),
   onSetModel: (modelID) => dispatch(modelActions.setModel(modelID)),
   onClickLayer: (modelId, layerName,filters) => dispatch(boardActions.onClickLayer(modelId, layerName,filters)),
+
 });
 
 
