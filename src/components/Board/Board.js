@@ -89,7 +89,8 @@ const Board = ({model_id, model_graph, container}) => {
      */
     'click': function (params) {
       const layerName = params.data.name
-      container.clickLayer(model_id, layerName);
+      const layerType= params.data.value
+      container.clickLayer(model_id, layerName,layerType);
     },
     'legendselectchanged': this.onChartLegendselectchanged
   }

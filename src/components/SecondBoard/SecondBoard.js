@@ -53,11 +53,11 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
     const header = filterResponse.headers;
     const kFilterNum = parseInt(filterResponse.headers.filternum);
     kDepthNum = parseInt(filterResponse.headers.depthnum);
-    const kKernelWidth = parseInt(filterResponse.headers.kernelwidth);
-    const kKernelHeight = parseInt(filterResponse.headers.kernelheight);
+    const kWidth = parseInt(filterResponse.headers.vwidth);
+    const kHeight = parseInt(filterResponse.headers.vheight);
     const valMin = parseFloat(filterResponse.headers.valmin);
     const valMax = parseFloat(filterResponse.headers.valmax);
-    const kKernelArea = kKernelWidth * kKernelHeight;
+    const kArea = kWidth * kHeight;
 
     const kFilterWidth = parseInt(Math.sqrt(kBoxValidArea / kFilterNum));
     const kFilterHeight = kFilterWidth;
@@ -66,14 +66,14 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
     const maxRowNum = parseInt((kFilterNum - 1) / maxColNum) + 1;
 
     // 축 눈금 설정
-    for (var i = 0; i < kKernelWidth * maxColNum; i++) {
+    for (var i = 0; i < kWidth * maxColNum; i++) {
       xData.push(i);
     }
-    for (var j = 0; j < kKernelHeight * maxRowNum; j++) {
+    for (var j = 0; j < kHeight * maxRowNum; j++) {
       yData.push(j);
     }
 
-    const pointNum = kFilterNum * kKernelWidth * kKernelHeight;
+    const pointNum = kFilterNum * kWidth * kHeight;
     const flattenLen = kDepthNum * pointNum * 3;
 
     const arrBuff = filterResponse.data;
@@ -118,7 +118,7 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
       tooltip: {
         position: 'right',
         formatter: function (p) {
-          return 'Filter : ' + parseInt(p.dataIndex / kKernelArea) +
+          return 'Filter : ' + parseInt(p.dataIndex / kArea) +
             '</br>' +
             ' data : ' + p.data;
         }
@@ -139,10 +139,10 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
         gridIndex: 0,
 
         min: 0,
-        interval: kKernelWidth - 1,
+        interval: kWidth - 1,
 
         axisTick: {
-          interval: kKernelWidth - 1,
+          interval: kWidth - 1,
           alignWithLabel: true,
 
           inside: true,
@@ -152,7 +152,7 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
           }
         },
         axisLabel: {
-          interval: kKernelWidth - 1,
+          interval: kWidth - 1,
         },
       },
       yAxis: {
@@ -163,10 +163,10 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
         inverse: true,
 
         min: 0,
-        interval: kKernelHeight - 1,
+        interval: kHeight - 1,
 
         axisTick: {
-          interval: kKernelHeight - 1,
+          interval: kHeight - 1,
           alignWithLabel: true,
 
           inside: true,
@@ -176,7 +176,7 @@ const SecondBoard = ({model_id, layer_name, filterResponse, depth, container}) =
           }
         },
         axisLabel: {
-          interval: kKernelWidth - 1,
+          interval: kWidth - 1,
         },
 
       },

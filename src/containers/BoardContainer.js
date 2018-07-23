@@ -33,7 +33,7 @@ class BoardContainer extends React.Component {
     // }
   }
 
-  clickLayer(model_id, layer_name) {
+  clickLayer(model_id, layer_name,layer_type) {
     const {layer_name_prop,onClickLayer} = this.props;
 
     if(layer_name_prop == layer_name) return;
@@ -47,12 +47,14 @@ class BoardContainer extends React.Component {
 
     axios({
       method:'get',
-      url:API_URL+'/filters/',
+      url:API_URL+'/LayerData/',
       responseType:'arraybuffer',
       // responseType:'application/octet-stream',
       params: {
         model_id: model_id,
         layer_name: layer_name,
+        layer_type: layer_type,
+        image_path: 'undefined',
         box_width:SecondBoardStyle.BoxWidth,
         box_height:SecondBoardStyle.BoxHeight,
         row_space:SecondBoardStyle.RowSpace,
@@ -63,6 +65,7 @@ class BoardContainer extends React.Component {
         console.log('Layer:' + layer_name+'] Response time : ' + ((performance.now() - starttime)/1000) + 's');
         const ReadMega = response.headers['content-length'] / Math.pow(2,20);
         console.log('content-length : '+ReadMega+'mb'    );
+        console.log(response);
         onClickLayer(model_id, layer_name, response);
       })
   }
