@@ -1,9 +1,14 @@
+$SidenavWidth:200px;
+
 .Sidenav {
-  position: relative;
+  //position: relative;
+  position: fixed;
+  height:100%;
   z-index: 0;
 
   .bm-menu-wrap {
-    //box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    //width:$SidenavWidth !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   }
   .bm-item-list {
     padding-top: 25%;
@@ -14,4 +19,8 @@
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+:export {
+  SidenavWidth:$SidenavWidth;
 }

@@ -43,19 +43,19 @@ const Board = ({model_id, model_graph, container}) => {
       {
         type: 'graph',
         layout: 'none',
-        // symbolSize: [120,20],
-        symbolSize: [165,20],
+        symbolSize: [120,16],
+        // symbolSize: [165,20],
         symbol: 'rect',
         // roam: true,
         roam: false,
         // PBW 0505_2018
         top: 100,
-        left: 100,
+        left: 70,
         label: {
           normal: {
             show: true,
             color: 'white',
-            fontSize: 15
+            fontSize: 10
           },
         },
         itemStyle: {
@@ -72,7 +72,6 @@ const Board = ({model_id, model_graph, container}) => {
         edgeSymbol: ['circle', 'arrow'],
         edgeSymbolSize: [1, 2],
         data: data,
-        // links: [],
         links: links
       }
     ]
@@ -92,7 +91,6 @@ const Board = ({model_id, model_graph, container}) => {
       const layerType= params.data.value
       container.clickLayer(model_id, layerName,layerType);
     },
-    'legendselectchanged': this.onChartLegendselectchanged
   }
 
   return (

@@ -1,24 +1,32 @@
-$BoxWidth:600;
-$BoxHeight:600;
+$BoxWidth:500;
+$BoxHeight:500;
 $RowSpace:20;
 $ColSpace:20;
 
 .SecondBoard {
   position: fixed;
-  height:100%;
+
   top:69px;
-  left: 50%;
-  width:50%;
+  left: 500px;
   bottom: 0;
   right: 0;
+
+  width:500px;
+  height:100%;
   background-color: cornsilk;
+  padding: 0px 5px 0px 5px;
+  box-shadow:
+          0 2px 4px -1px rgba(0,0,0,0.2),
+          0 4px 5px 0 rgba(0,0,0,.14),
+          0 1px 10px 0 rgba(0,0,0,.12);
 
   .rc-slider{
     left:5%;
     width:90%;
   }
   .echarts-for-react{
-    height: 70% !important;
+    width: 500px !important;
+    height: 500px !important;
     overflow: hidden;
 
     > object{

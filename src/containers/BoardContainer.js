@@ -38,11 +38,9 @@ class BoardContainer extends React.Component {
 
     if(layer_name_prop == layer_name) return;
 
-    if(secondEchartInstance){
-      secondEchartInstance.showLoading('default',{
-        text:'Waiting Response...'
-      });
-    }
+  if(secondEchartInstance){
+    secondEchartInstance.showLoading();
+  }
     const starttime = performance.now()
 
     axios({
