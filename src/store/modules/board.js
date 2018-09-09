@@ -1,31 +1,39 @@
 const CLICK_LAYER = 'CLICK_LAYER';
-const CHANGE_MODE= 'CHANGE_MODE';
-const CHANGE_DEPTH= 'CHANGE_DEPTH';
+const CHANGE_MODE = 'CHANGE_MODE';
+const CHANGE_DEPTH = 'CHANGE_DEPTH';
 
-export const onClickLayer = (modelId, layerName, filterResponse) => ({
+export const onClickLayer = (modelId, layerName, layerType, filterResponse) => ({
   type: CLICK_LAYER,
   payload: {
     id: modelId,
     layer: layerName,
+    layerType: layerType,
     filterResponse: filterResponse,
   }
 });
 
-export const onChangeMode= (modeValue) => ({
+export const onChangeMode = (modeValue, filterResponse) => ({
   type: CHANGE_MODE,
-  mode:modeValue
+  payload: {
+    mode: modeValue,
+    filterResponse: filterResponse
+  }
 });
 
-export const onChangeDepth= (depthValue) => ({
+export const onChangeDepth = (depthValue,filterResponse) => ({
   type: CHANGE_DEPTH,
-  depth: depthValue
+  payload: {
+    depth: depthValue,
+    filterResponse: filterResponse
+  }
 });
 
 const initialState = {
   layer_name: '',
-  filterResponse:undefined,
-  mode:0,
-  depth:0
+  layer_type: undefined,
+  filterResponse: undefined,
+  mode: 0,
+  depth: 0
 };
 
 const board = (state = initialState, action) => {
@@ -34,18 +42,21 @@ const board = (state = initialState, action) => {
       return {
         ...state,
         layer_name: action.payload.layer,
+        layer_type: action.payload.layerType,
         filterResponse: action.payload.filterResponse,
-        depth:0
+        depth: 0
       };
     case CHANGE_MODE:
       return {
         ...state,
-        mode:action.mode
+        mode: action.payload.mode,
+        filterResponse: action.payload.filterResponse
       }
     case CHANGE_DEPTH:
       return {
         ...state,
-        depth:action.depth
+        depth: action.payload.depth,
+        filterResponse: action.payload.filterResponse
       };
     default:
       return state;

@@ -2330,12 +2330,12 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-echarts-for-react@^2.0.8:
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/echarts-for-react/-/echarts-for-react-2.0.13.tgz#fd1bff5bcf6ebf2709b0fd28355f42b762dc89a4"
+echarts-for-react@^2.0.13:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/echarts-for-react/-/echarts-for-react-2.0.14.tgz#6df7a31eea43ef35321e20a5854109cbc52c9df3"
   dependencies:
     fast-deep-equal "^2.0.1"
-    size-sensor "^0.0.4"
+    size-sensor "^0.2.0"
 
 echarts-gl@^1.1.1:
   version "1.1.1"
@@ -7002,9 +7002,9 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-size-sensor@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/size-sensor/-/size-sensor-0.0.4.tgz#e72a2b5346fa6009ce8703a72859fafbd75a5b7b"
+size-sensor@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/size-sensor/-/size-sensor-0.2.1.tgz#e0f7351816a12cd8ba33475aa964112d1cf75439"
 
 slash@^1.0.0:
   version "1.0.0"

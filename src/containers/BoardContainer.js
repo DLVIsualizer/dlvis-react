@@ -34,24 +34,25 @@ class BoardContainer extends React.Component {
   }
 
   clickLayer(model_id, layer_name,layer_type) {
-    const {layer_name_prop,onClickLayer} = this.props;
+    const {layer_name_prop,visual_mode_prop,onClickLayer} = this.props;
 
     if(layer_name_prop == layer_name) return;
 
   if(secondEchartInstance){
+    secondEchartInstance.clear();
     secondEchartInstance.showLoading();
   }
     const starttime = performance.now()
 
     axios({
       method:'get',
-      url:API_URL+'/LayerData/',
+      url:API_URL+'/layer_data/',
       responseType:'arraybuffer',
-      // responseType:'application/octet-stream',
       params: {
         model_id: model_id,
         layer_name: layer_name,
         layer_type: layer_type,
+        visual_mode: visual_mode_prop,
         image_path: 'undefined',
         box_width:SecondBoardStyle.BoxWidth,
         box_height:SecondBoardStyle.BoxHeight,
@@ -64,11 +65,9 @@ class BoardContainer extends React.Component {
         const ReadMega = response.headers['content-length'] / Math.pow(2,20);
         console.log('content-length : '+ReadMega+'mb'    );
         console.log(response);
-        onClickLayer(model_id, layer_name, response);
+        onClickLayer(model_id, layer_name,layer_type, response);
       })
   }
-
-
 
   render() {
     const {model_id, model_graph} = this.props;
@@ -90,13 +89,14 @@ const mapStateToProps = (state) => ({
   model_id: state.models.get('model_id'),
   model_graph: state.models.get('model_graph'),
   layer_name_prop: state.board.layer_name,
+  visual_mode_prop: state.board.mode,
 });
 
 
 const mapDispatchToProps = (dispatch) => ({
   onAddModelGraph: (modelID, modelGraph) => dispatch(modelActions.addModelGraph(modelID, modelGraph)),
   onSetModel: (modelID) => dispatch(modelActions.setModel(modelID)),
-  onClickLayer: (modelId, layerName,filters) => dispatch(boardActions.onClickLayer(modelId, layerName,filters)),
+  onClickLayer: (modelId, layerName,layerType,filterResponse) => dispatch(boardActions.onClickLayer(modelId, layerName,layerType,filterResponse)),
 
 });
 
