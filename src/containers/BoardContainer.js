@@ -16,7 +16,7 @@ class BoardContainer extends React.Component {
 
     axios({
       method:'get',
-      url:'/layers/${model_id}',
+      url:`/layers/${model_id}`,
       baseURL:API_URL,
       headers:{
         'Access-Control-Allow-Origin': '*',
