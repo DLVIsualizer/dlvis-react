@@ -19,6 +19,8 @@ class BoardContainer extends React.Component {
       url:API_URL + `/layers/${model_id}`,
       headers:{
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': '*',
       },
     })
       .then(response => {
@@ -56,6 +58,8 @@ class BoardContainer extends React.Component {
       responseType:'arraybuffer',
       headers:{
       'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': '*',
       },
       params: {
         model_id: model_id,
