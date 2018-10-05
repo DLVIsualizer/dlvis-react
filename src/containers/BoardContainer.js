@@ -14,7 +14,13 @@ class BoardContainer extends React.Component {
   componentDidMount() {
     const {model_id, model_graphs, onAddModelGraph, onSetModel} = this.props;
 
-    axios.get(API_URL + `/layers/${model_id}`)
+    axios({
+      method:'get',
+      url:API_URL + `/layers/${model_id}`,
+      headers:{
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
       .then(response => {
         onAddModelGraph(model_id, response.data);
         onSetModel(model_id);
@@ -48,6 +54,9 @@ class BoardContainer extends React.Component {
       method:'get',
       url:API_URL+'/layer_data/',
       responseType:'arraybuffer',
+      headers:{
+      'Access-Control-Allow-Origin': '*',
+      },
       params: {
         model_id: model_id,
         layer_name: layer_name,
