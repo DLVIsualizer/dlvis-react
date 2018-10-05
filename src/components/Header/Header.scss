@@ -21,12 +21,14 @@
   }
 
   .menu-icon {
-    width: 5%;
+    display: none !important;
+    width: 0%;
     font-size: 1.2em;
     text-align: center;
   }
 
   .logo {
+    padding-left: 15px;
     font-size: 1.4em;
     font-weight: bold;
     vertical-align: middle;

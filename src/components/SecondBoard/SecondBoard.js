@@ -86,7 +86,7 @@ function GetImageBoard(model_id, layer_name, filterResponse, depth, mode, contai
     const maxColNum = parseInt((kUI_BoxWidth - kUI_RowSpace) / kUI_FilterWidth);
     const maxRowNum = parseInt((kFilterNum - 1) / maxColNum) + 1;
 
-        // 실제 keras모델에서 weight value들은 float32이지만
+    // 실제 keras모델에서 weight value들은 float32이지만
     //  numjs로 읽을 시에는 64로 해야함..?!
     const arrBuff = filterResponse.data;
     image = Buffer.from(arrBuff, 'binary').toString('base64')
@@ -95,39 +95,46 @@ function GetImageBoard(model_id, layer_name, filterResponse, depth, mode, contai
   }
   return (
     <div className="SecondBoard" id='SecondBoard'>
-      <b>LayerName</b><br></br> {layer_name}<br></br>
-      <b>Mode</b><br></br>
-      <ButtonGroup size="sm">
-        {
-          FILTER_VISUAL_MODE.map((model_name, idx) => {
-            return (
-              <Button key={idx}>
-                <div onClick={() => onChangeMode(idx)}>{FILTER_VISUAL_MODE[idx]}</div>
-              </Button>);
-          })
-        }
-      </ButtonGroup><br></br>
-      <b>Depth</b>
-      <SliderWithTooltip
-        min={0}
-        max={kDepthNum - 1}
-        dots step={1} value={depth}
-        tipFormatter={depthIndexFormatter}
-        tipProps={{overlayClassName: 'foo'}}
-        onChange={onChangeSlider}
-      />
+      <div className="board-section layer">
+        <div>Layer Name</div>
+        <div>{layer_name}</div>
+      </div>
+      <div className="board-section mode">
+        <div>Mode</div>
+        <ButtonGroup size="sm">
+          {
+            FILTER_VISUAL_MODE.map((model_name, idx) => {
+              return (
+                <Button key={idx}>
+                  <div onClick={() => onChangeMode(idx)}>{FILTER_VISUAL_MODE[idx]}</div>
+                </Button>);
+            })
+          }
+        </ButtonGroup>
+      </div>
+      <div className="board-section depth">
+        <div>Depth</div>
+        <SliderWithTooltip
+          min={0}
+          max={kDepthNum - 1}
+          dots step={1} value={depth}
+          tipFormatter={depthIndexFormatter}
+          tipProps={{overlayClassName: 'foo'}}
+          onChange={onChangeSlider}
+        />
 
-      <img className='test-input' src={image} align="center" width={kUI_BoxWidth-20} height={kUI_BoxHeight-20}/>
-      <ReactEcharts id='filter'
-                    option={emptyOption}
-                    showLoading={false}
-                    ref={(e) => {
-                      if (e) {
-                        secondEchartInstance = e.getEchartsInstance();
-                        secondEchartInstance.hideLoading();
+        <img className='test-input' src={image} align="center" width={kUI_BoxWidth - 20} height={kUI_BoxHeight - 20}/>
+        <ReactEcharts id='filter'
+                      option={emptyOption}
+                      showLoading={false}
+                      ref={(e) => {
+                        if (e) {
+                          secondEchartInstance = e.getEchartsInstance();
+                          secondEchartInstance.hideLoading();
 
-                      }
-                    }}/>
+                        }
+                      }}/>
+      </div>
     </div>
   );
 
@@ -418,37 +425,45 @@ function GetEchartBoard(model_id, layer_name, filterResponse, depth, mode, conta
 
   return (
     <div className="SecondBoard" id='SecondBoard'>
-      <b>LayerName</b><br></br> {layer_name}<br></br>
-      <b>Mode</b><br></br>
-      <ButtonGroup size="sm">
-        {
-          FILTER_VISUAL_MODE.map((model_name, idx) => {
-            return (
-              <Button key={idx}>
-                <div onClick={() => onChangeMode(idx)}>{FILTER_VISUAL_MODE[idx]}</div>
-              </Button>);
-          })
-        }
-      </ButtonGroup><br></br>
+      <div className="board-section layer">
+        <div>Layer Name</div>
+        <div>{layer_name}</div>
+      </div>
+      <div className="board-section mode">
+        <div>Mode</div>
+        <ButtonGroup size="sm">
+          {
+            FILTER_VISUAL_MODE.map((model_name, idx) => {
+              return (
+                <Button key={idx}>
+                  <div onClick={() => onChangeMode(idx)}>{FILTER_VISUAL_MODE[idx]}</div>
+                </Button>);
+            })
+          }
+        </ButtonGroup>
+      </div>
+      <div className="board-section depth">
+        <div>Depth</div>
+        <SliderWithTooltip
+          min={0}
+          max={kDepthNum - 1}
+          dots step={1} value={depth}
+          tipFormatter={depthIndexFormatter}
+          tipProps={{overlayClassName: 'foo'}}
+          onChange={onChangeSlider}
+        />
+        <ReactEcharts id='filter'
+                      option={option}
+                      showLoading={true}
+                      ref={(e) => {
+                        if (e) {
+                          secondEchartInstance = e.getEchartsInstance();
+                          secondEchartInstance.hideLoading();
+                        }
+                      }}
+        />
+      </div>
       <b>Depth</b>
-      <SliderWithTooltip
-        min={0}
-        max={kDepthNum - 1}
-        dots step={1} value={depth}
-        tipFormatter={depthIndexFormatter}
-        tipProps={{overlayClassName: 'foo'}}
-        onChange={onChangeSlider}
-      />
-      <ReactEcharts id='filter'
-                    option={option}
-                    showLoading={true}
-                    ref={(e) => {
-                      if (e) {
-                        secondEchartInstance = e.getEchartsInstance();
-                        secondEchartInstance.hideLoading();
-                      }
-                    }}
-      />
     </div>
   );
 }

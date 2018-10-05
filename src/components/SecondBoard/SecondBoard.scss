@@ -14,15 +14,14 @@ $ColSpace:20;
   width:500px;
   height:100%;
   background-color: cornsilk;
-  padding: 0px 5px 0px 5px;
   box-shadow:
           0 2px 4px -1px rgba(0,0,0,0.2),
           0 4px 5px 0 rgba(0,0,0,.14),
           0 1px 10px 0 rgba(0,0,0,.12);
 
   .rc-slider{
-    left:5%;
-    width:90%;
+    margin: 10px;
+    width: 95%;
   }
   .echarts-for-react{
     width: 500px !important;
@@ -31,6 +30,16 @@ $ColSpace:20;
 
     > object{
       display: none !important;
+    }
+  }
+
+  .board-section {
+    padding: 10px;
+    box-sizing: border-box;
+
+    >div:first-child {
+      font-weight: bold;
+      margin-bottom: 5px;
     }
   }
 }
