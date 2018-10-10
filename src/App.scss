@@ -4,4 +4,14 @@
     top: 80px;
     left: 20px;
   }
+  .ImageDropdown {
+    position: fixed;
+    top: 80px;
+    left: 140px;
+
+    .sampleName {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
 }

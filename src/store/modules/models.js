@@ -2,6 +2,7 @@ import { Map, List } from 'immutable';
 
 const ADD_MODEL_GRAPH = 'ADD_MODEL_GRAPH';
 const SET_MODEL = 'SET_MODEL';
+const SET_IMAGE = 'SET IMAGE';
 
 export const addModelGraph = (modelID, modelGraph) => ({
   type: ADD_MODEL_GRAPH,
@@ -16,7 +17,13 @@ export const setModel = (modelID) => ({
   id: modelID
 });
 
+export const setImage = (imgID) => ({
+  type: SET_IMAGE,
+  id: imgID
+});
+
 const initialState = Map({
+  img_id: 0,
   model_id: 0,
   model_graph: Map({
     graph: Map({}),
@@ -35,6 +42,8 @@ const models = (state=initialState, action) => {
       return state
         .set('model_id', action.id)
         .set('model_graph', model_graphs.get(action.id));
+    case SET_IMAGE:
+      return state.set('img_id', action.id);
     default:
       return state;
   }

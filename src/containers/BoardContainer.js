@@ -43,7 +43,7 @@ class BoardContainer extends React.Component {
   }
 
   clickLayer(model_id, layer_name,layer_type) {
-    const {layer_name_prop,visual_mode_prop,onClickLayer} = this.props;
+    const {img_id,layer_name_prop,visual_mode_prop,onClickLayer} = this.props;
 
     if(layer_name_prop == layer_name) return;
 
@@ -68,7 +68,7 @@ class BoardContainer extends React.Component {
         layer_name: layer_name,
         layer_type: layer_type,
         visual_mode: visual_mode_prop,
-        image_path: 'undefined',
+        image_path: img_id,
         box_width:SecondBoardStyle.BoxWidth,
         box_height:SecondBoardStyle.BoxHeight,
         row_space:SecondBoardStyle.RowSpace,
@@ -101,6 +101,7 @@ class BoardContainer extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+  img_id: state.models.get('img_id'),
   model_id: state.models.get('model_id'),
   model_graph: state.models.get('model_graph'),
   layer_name_prop: state.board.layer_name,
