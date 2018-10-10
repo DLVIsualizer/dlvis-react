@@ -2,9 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as modelsActions from "../store/modules/models";
 import {ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import SecondBoardStyle from '../components/SecondBoard/SecondBoard.scss';
 import axios from "axios/index";
 import {API_URL} from "../config";
 import {MODEL_NAMES, IMAGE_NAMES} from "../constants";
+import * as boardActions from "../store/modules/board";
+import {secondEchartInstance} from "../components/SecondBoard/SecondBoard";
 
 class ModelDropdownContainer extends React.Component {
   constructor(props) {
@@ -19,6 +22,48 @@ class ModelDropdownContainer extends React.Component {
       isModelDropdownOpen: false,
       isImageDropdownOpen: false
     };
+  }
+
+  clickLayer(model_id, layer_name, layer_type) {
+    const {img_id,layer_name_prop,visual_mode_prop,onClickLayer} = this.props;
+
+    if(layer_name_prop == layer_name) return;
+
+    if(secondEchartInstance){
+      secondEchartInstance.clear();
+      secondEchartInstance.showLoading();
+    }
+
+    const starttime = performance.now();
+
+    axios({
+      method:'get',
+      url:'/layer_data/',
+      baseURL:API_URL,
+      responseType:'arraybuffer',
+      headers:{
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': '*',
+      },
+      params: {
+        model_id: model_id,
+        layer_name: layer_name,
+        layer_type: layer_type,
+        visual_mode: visual_mode_prop,
+        image_path: img_id,
+        box_width:SecondBoardStyle.BoxWidth,
+        box_height:SecondBoardStyle.BoxHeight,
+        row_space:SecondBoardStyle.RowSpace,
+        col_space:SecondBoardStyle.ColSpace
+      }
+    }).then(response => {
+      console.log('Layer:' + layer_name+'] Response time : ' + ((performance.now() - starttime)/1000) + 's');
+      const ReadMega = response.headers['content-length'] / Math.pow(2,20);
+      console.log('content-length : '+ReadMega+'mb'    );
+      console.log(response);
+      onClickLayer(model_id, layer_name,layer_type, response);
+    })
   }
 
   changeModel(modelID) {
@@ -36,7 +81,9 @@ class ModelDropdownContainer extends React.Component {
   }
 
   changeImage(imgID) {
-    this.props.onSetImage(imgID);
+    const {model_id, layer_name, layer_type, onSetImage} = this.props;
+    onSetImage(imgID);
+    this.clickLayer(model_id, layer_name, layer_type);
   }
 
   toggleModel() {
@@ -78,7 +125,7 @@ class ModelDropdownContainer extends React.Component {
         <div className="ImageDropdown">
           <ButtonDropdown isOpen={this.state.isImageDropdownOpen} toggle={this.toggleImage}>
             <DropdownToggle caret>
-              {IMAGE_NAMES[img_id]}
+                {IMAGE_NAMES[img_id]}
             </DropdownToggle>
             <DropdownMenu>
               {
@@ -103,14 +150,18 @@ class ModelDropdownContainer extends React.Component {
 const mapStateToProps = (state) => ({
   img_id: state.models.get('img_id'),
   model_id: state.models.get('model_id'),
-  model_graphs: state.models.get('model_graphs')
+  model_graphs: state.models.get('model_graphs'),
+  model_graph: state.models.get('model_graph'),
+  layer_name: state.board.layer_name,
+  layer_type: state.board.layer_type
 });
 
 
 const mapDispatchToProps = (dispatch) => ({
   onAddModelGraph: (modelID, modelGraph) => dispatch(modelsActions.addModelGraph(modelID, modelGraph)),
   onSetModel: (modelID) => dispatch(modelsActions.setModel(modelID)),
-  onSetImage: (imgID) => dispatch(modelsActions.setImage(imgID))
+  onSetImage: (imgID) => dispatch(modelsActions.setImage(imgID)),
+  onClickLayer: (modelId, layerName,layerType,filterResponse) => dispatch(boardActions.onClickLayer(modelId, layerName,layerType,filterResponse)),
 });
 
 export default connect(

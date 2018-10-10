@@ -47,11 +47,12 @@ class BoardContainer extends React.Component {
 
     if(layer_name_prop == layer_name) return;
 
-  if(secondEchartInstance){
-    secondEchartInstance.clear();
-    secondEchartInstance.showLoading();
-  }
-    const starttime = performance.now()
+    if(secondEchartInstance){
+      secondEchartInstance.clear();
+      secondEchartInstance.showLoading();
+    }
+
+    const starttime = performance.now();
 
     axios({
       method:'get',
@@ -74,8 +75,7 @@ class BoardContainer extends React.Component {
         row_space:SecondBoardStyle.RowSpace,
         col_space:SecondBoardStyle.ColSpace
       }
-    })
-      .then(response => {
+    }).then(response => {
         console.log('Layer:' + layer_name+'] Response time : ' + ((performance.now() - starttime)/1000) + 's');
         const ReadMega = response.headers['content-length'] / Math.pow(2,20);
         console.log('content-length : '+ReadMega+'mb'    );
