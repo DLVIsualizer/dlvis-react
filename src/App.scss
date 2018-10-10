@@ -1,13 +1,18 @@
 .App {
+  .dropdown-toggle {
+    width: 140px;
+  }
+
   .ModelDropdown {
     position: fixed;
     top: 80px;
     left: 20px;
   }
+
   .ImageDropdown {
     position: fixed;
     top: 80px;
-    left: 140px;
+    left: 170px;
 
     .sampleName {
       display: inline-block;
