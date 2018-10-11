@@ -153,7 +153,8 @@ const mapStateToProps = (state) => ({
   model_graphs: state.models.get('model_graphs'),
   model_graph: state.models.get('model_graph'),
   layer_name: state.board.layer_name,
-  layer_type: state.board.layer_type
+  layer_type: state.board.layer_type,
+  visual_mode_prop: state.board.mode
 });
 
 
