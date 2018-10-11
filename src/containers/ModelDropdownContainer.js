@@ -24,8 +24,8 @@ class ModelDropdownContainer extends React.Component {
     };
   }
 
-  clickLayer(model_id, layer_name, layer_type) {
-    const {img_id,layer_name_prop,visual_mode_prop,onClickLayer} = this.props;
+  clickLayer(model_id, layer_name, layer_type,img_id) {
+    const {layer_name_prop,visual_mode_prop,onClickLayer} = this.props;
 
     if(layer_name_prop == layer_name) return;
 
@@ -83,7 +83,7 @@ class ModelDropdownContainer extends React.Component {
   changeImage(imgID) {
     const {model_id, layer_name, layer_type, onSetImage} = this.props;
     onSetImage(imgID);
-    this.clickLayer(model_id, layer_name, layer_type);
+    this.clickLayer(model_id, layer_name, layer_type,img_id);
   }
 
   toggleModel() {
