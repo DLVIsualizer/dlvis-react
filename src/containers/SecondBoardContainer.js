@@ -50,7 +50,7 @@ class SecondBoardContainer extends React.Component {
   }
 
   changeDepth(depth){
-    const {onChangeDepth,model_id,layer_name,layer_type,visual_mode_prop} = this.props;
+    const {img_id,onChangeDepth,model_id,layer_name,layer_type,visual_mode_prop} = this.props;
 
     const starttime = performance.now();
 
@@ -64,7 +64,7 @@ class SecondBoardContainer extends React.Component {
         layer_type: layer_type,
         visual_mode: visual_mode_prop,
         visual_depth: depth,
-        image_path: 'undefined',
+        image_path: img_id,
         box_width:SecondBoardStyle.BoxWidth,
         box_height:SecondBoardStyle.BoxHeight,
         row_space:SecondBoardStyle.RowSpace,
